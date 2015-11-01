@@ -17,6 +17,7 @@
  **/
 package jo.sm.plugins.ship.edit;
 
+import jo.sm.data.BlockSparseMatrix;
 import jo.sm.data.SparseMatrix;
 import jo.sm.data.StarMade;
 import jo.sm.mods.IBlocksPlugin;
@@ -57,7 +58,7 @@ public class HardenPlugin implements IBlocksPlugin {
     }
 
     @Override
-    public void initParameterBean(SparseMatrix<Block> original, Object params,
+    public void initParameterBean(BlockSparseMatrix original, Object params,
             StarMade sm, IPluginCallback cb) {
     }
 
@@ -67,9 +68,9 @@ public class HardenPlugin implements IBlocksPlugin {
     }
 
     @Override
-    public SparseMatrix<Block> modify(SparseMatrix<Block> original,
+    public BlockSparseMatrix modify(BlockSparseMatrix original,
             Object p, StarMade sm, IPluginCallback cb) {
-        SparseMatrix<Block> modified = new SparseMatrix<>(original);
+        BlockSparseMatrix modified = new BlockSparseMatrix(original);
         HullLogic.power(modified);
         return modified;
     }

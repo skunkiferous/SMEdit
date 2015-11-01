@@ -26,6 +26,7 @@ import java.util.logging.Logger;
 
 import javax.imageio.ImageIO;
 
+import jo.sm.data.BlockSparseMatrix;
 import jo.sm.data.BlockTypes;
 import jo.sm.data.SparseMatrix;
 import jo.sm.data.StarMade;
@@ -82,7 +83,7 @@ public class ImagePlugin implements IBlocksPlugin {
     }
 
     @Override
-    public void initParameterBean(SparseMatrix<Block> original, Object params,
+    public void initParameterBean(BlockSparseMatrix original, Object params,
             StarMade sm, IPluginCallback cb) {
     }
 
@@ -92,7 +93,7 @@ public class ImagePlugin implements IBlocksPlugin {
     }
 
     @Override
-    public SparseMatrix<Block> modify(SparseMatrix<Block> original,
+    public BlockSparseMatrix modify(BlockSparseMatrix original,
             Object p, StarMade sm, IPluginCallback cb) {
         ImageParameters params;
         params = (ImageParameters) p;
@@ -114,8 +115,8 @@ public class ImagePlugin implements IBlocksPlugin {
         if (cb != null) {
             cb.startTask(mAdvanceLength);
         }
-        SparseMatrix<Block> modified;
-        modified = new SparseMatrix<>(original);
+        BlockSparseMatrix modified;
+        modified = new BlockSparseMatrix(original);
         Point3i advance;
         advance = new Point3i(mStartingPoint);
         for (int x = 0; x < mAdvanceLength; x++) {

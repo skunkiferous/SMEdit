@@ -48,6 +48,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JSeparator;
 import javax.swing.JTabbedPane;
 import javax.swing.JToolBar;
+import javax.swing.UIManager;
 import javax.swing.border.EmptyBorder;
 import jo.log.TextAreaLogHandler;
 import jo.sm.logic.RunnableLogic;
@@ -107,6 +108,17 @@ public class RenderFrame extends JFrame {
             StarMadeLogic.saveProps();
         }
         StarMadeLogic.setBaseDir(home);
+        try {
+          UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+//          for (LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
+//             if ("Nimbus".equals(info.getName())) {
+//                 UIManager.setLookAndFeel(info.getClassName());
+//                 break;
+//              }
+//          }
+      } catch (Exception e) {
+          e.printStackTrace();
+      }        
     }
 
     public static void main(String[] args) {
@@ -190,7 +202,7 @@ public class RenderFrame extends JFrame {
     private JButton mPlugins;
 
     public RenderFrame(String[] args) {
-        setTitle(GlobalConfiguration.NAME + " version 1.0" + ((float) GlobalConfiguration.getVersion() / 100));
+        setTitle(GlobalConfiguration.NAME + " version " + GlobalConfiguration.getVersion());
         mArgs = args;
         setIconImage(GlobalConfiguration.getImage(Resources.ICON));
         setSize(1024, 768);

@@ -16,7 +16,7 @@
  * the License.
  */
 
-package jo.util;
+package jo.sm.edit.util;
 
 /**
  * @Auther Robert Barefoot for SMEdit - version 1.0
@@ -29,18 +29,16 @@ public class URLs {
     public static final String IASNTH = TRUNK + "Omen-Navy-Class/";
     public static final String ISDATA = IASNTH + "DATA/";
     public static final String SVNICON = RESOURCE + "images/";
-    /* url */
-    public static final String PROJECT = URL + "smedit2.lazygamerz.org/";
-    public static final String SITE = URL + "smedit2.lazygamerz.org";
+    public static final String CODE = "http://MonsterApps.net/smedit/";
     /* files */
     public static final String ISANTH_HEAD = IASNTH + "header.smbph";
     public static final String ISANTH_LOGIC = IASNTH + "logic.smbpl";
     public static final String ISANTH_META = IASNTH + "meta.smbpm";
     public static final String ISANTH_DATA = ISDATA + "Omen-Navy-Class.0.0.0.smd2";
-    public static final String DOWNLOAD = TRUNK + "jo_sm.jar";
-    public static final String DOWNSTART = TRUNK + "SMEdit.jar";
-    public static final String DOWNLOADPLUG = TRUNK + "JoFileMods.jar";
-    public static final String SVERSION = RESOURCE + "start_version.dat";
+    public static final String DOWNLOAD = CODE + Paths.SM_JAR;
+    public static final String DOWNSTART = CODE + Paths.STARTER_JAR;
+    public static final String DOWNLOADPLUG = CODE + Paths.PLUGIN_JAR;
+    public static final String SVERSION = CODE + Paths.SM_VERSION_FILE;
     /* icons */
     public static final String ICON_FILE_ACCOUNT = SVNICON + "account.png";
     public static final String ICON_FILE_HOME = SVNICON + "home.png";

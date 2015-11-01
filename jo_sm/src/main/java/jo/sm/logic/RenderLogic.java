@@ -29,6 +29,7 @@ import java.util.logging.Logger;
 
 import javax.swing.ImageIcon;
 
+import jo.sm.data.BlockSparseMatrix;
 import jo.sm.data.BlockTypes;
 import jo.sm.data.CubeIterator;
 import jo.sm.data.RenderTile;
@@ -44,7 +45,7 @@ import jo.vecmath.Point3i;
 public class RenderLogic {
     private static final Logger log = Logger.getLogger(RenderLogic.class.getName());
 
-    public static List<RenderTile> getRender(SparseMatrix<Block> blocks) {
+    public static List<RenderTile> getRender(BlockSparseMatrix blocks) {
         List<RenderTile> polys = new ArrayList<>();
         Point3i lower = new Point3i();
         Point3i upper = new Point3i();
@@ -53,7 +54,7 @@ public class RenderLogic {
         return polys;
     }
 
-    private static void getBasicPolys(SparseMatrix<Block> blocks,
+    private static void getBasicPolys(BlockSparseMatrix blocks,
             Point3i upper, Point3i lower, List<RenderTile> polys) {
         for (CubeIterator i = new CubeIterator(lower, upper); i.hasNext();) {
             Point3i p = i.next();
@@ -75,15 +76,15 @@ public class RenderLogic {
         }
     }
 
-    private static void doPenta(SparseMatrix<Block> blocks, Point3i p, List<RenderTile> polys) {
+    private static void doPenta(BlockSparseMatrix blocks, Point3i p, List<RenderTile> polys) {
 
     }
 
-    private static void doTetra(SparseMatrix<Block> blocks, Point3i p, List<RenderTile> polys) {
+    private static void doTetra(BlockSparseMatrix blocks, Point3i p, List<RenderTile> polys) {
 
     }
 
-    private static void doCorner(SparseMatrix<Block> blocks, Point3i p, List<RenderTile> polys) {
+    private static void doCorner(BlockSparseMatrix blocks, Point3i p, List<RenderTile> polys) {
         log.log(Level.INFO, "Corner, ori="+blocks.get(p).getOrientation());
         switch (blocks.get(p).getOrientation()) {
             case 0: // spire: xp,zm>yp
@@ -145,7 +146,7 @@ public class RenderLogic {
         }
     }
 
-    private static void doWedge(SparseMatrix<Block> blocks, Point3i p, List<RenderTile> polys) {
+    private static void doWedge(BlockSparseMatrix blocks, Point3i p, List<RenderTile> polys) {
         switch (blocks.get(p).getOrientation()) {
             case 0: // YPZM
                 doXMSquare(blocks, p, polys, RenderTile.TRI4);
@@ -262,7 +263,7 @@ public class RenderLogic {
         }
     }
 
-    private static void doCube(SparseMatrix<Block> blocks, Point3i p, List<RenderTile> polys) {
+    private static void doCube(BlockSparseMatrix blocks, Point3i p, List<RenderTile> polys) {
         doXPSquare(blocks, p, polys, RenderTile.SQUARE);
         doXMSquare(blocks, p, polys, RenderTile.SQUARE);
         doYPSquare(blocks, p, polys, RenderTile.SQUARE);
@@ -271,7 +272,7 @@ public class RenderLogic {
         doZMSquare(blocks, p, polys, RenderTile.SQUARE);
     }
 
-    private static void doRect(SparseMatrix<Block> blocks, Point3i p,
+    private static void doRect(BlockSparseMatrix blocks, Point3i p,
             List<RenderTile> polys, int facing) {
         RenderTile rp = new RenderTile();
         rp.setBlock(blocks.get(p));
@@ -281,7 +282,7 @@ public class RenderLogic {
         polys.add(rp);
     }
 
-    private static void doZMSquare(SparseMatrix<Block> blocks, Point3i p,
+    private static void doZMSquare(BlockSparseMatrix blocks, Point3i p,
             List<RenderTile> polys, int type) {
         if (!blocks.contains(new Point3i(p.x, p.y, p.z - 1))) {
             RenderTile rp = new RenderTile();
@@ -293,7 +294,7 @@ public class RenderLogic {
         }
     }
 
-    private static void doZPSquare(SparseMatrix<Block> blocks, Point3i p,
+    private static void doZPSquare(BlockSparseMatrix blocks, Point3i p,
             List<RenderTile> polys, int type) {
         if (!blocks.contains(new Point3i(p.x, p.y, p.z + 1))) {
             RenderTile rp = new RenderTile();
@@ -305,7 +306,7 @@ public class RenderLogic {
         }
     }
 
-    private static void doYMSquare(SparseMatrix<Block> blocks, Point3i p,
+    private static void doYMSquare(BlockSparseMatrix blocks, Point3i p,
             List<RenderTile> polys, int type) {
         if (!blocks.contains(new Point3i(p.x, p.y - 1, p.z))) {
             RenderTile rp = new RenderTile();
@@ -317,7 +318,7 @@ public class RenderLogic {
         }
     }
 
-    private static void doYPSquare(SparseMatrix<Block> blocks, Point3i p,
+    private static void doYPSquare(BlockSparseMatrix blocks, Point3i p,
             List<RenderTile> polys, int type) {
         if (!blocks.contains(new Point3i(p.x, p.y + 1, p.z))) {
             RenderTile rp = new RenderTile();
@@ -329,7 +330,7 @@ public class RenderLogic {
         }
     }
 
-    private static void doXMSquare(SparseMatrix<Block> blocks, Point3i p,
+    private static void doXMSquare(BlockSparseMatrix blocks, Point3i p,
             List<RenderTile> polys, int type) {
         if (!blocks.contains(new Point3i(p.x - 1, p.y, p.z))) {
             RenderTile rp = new RenderTile();
@@ -341,7 +342,7 @@ public class RenderLogic {
         }
     }
 
-    private static void doXPSquare(SparseMatrix<Block> blocks, Point3i p,
+    private static void doXPSquare(BlockSparseMatrix blocks, Point3i p,
             List<RenderTile> polys, int type) {
         if (!blocks.contains(new Point3i(p.x + 1, p.y, p.z))) {
             RenderTile rp = new RenderTile();

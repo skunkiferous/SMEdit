@@ -23,6 +23,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Map;
 
+import jo.sm.data.BlockSparseMatrix;
 import jo.sm.data.SparseMatrix;
 import jo.sm.logic.BlueprintLogic;
 import jo.sm.logic.RunnableLogic;
@@ -72,7 +73,7 @@ public class SaveAction extends GenericAction {
     private void doSaveFile() {
         final ShipSpec spec = StarMadeLogic.getInstance().getCurrentModel();
         final File dataFile = spec.getFile();
-        SparseMatrix<Block> grid = StarMadeLogic.getModel();
+        BlockSparseMatrix grid = StarMadeLogic.getModel();
         Map<Point3i, Data> data = ShipLogic.getData(grid);
         final Point3i p = new Point3i();
         final Data d = data.get(p);
@@ -106,7 +107,7 @@ public class SaveAction extends GenericAction {
 
     private void doSaveEntity() {
         ShipSpec spec = StarMadeLogic.getInstance().getCurrentModel();
-        SparseMatrix<Block> grid = StarMadeLogic.getModel();
+        BlockSparseMatrix grid = StarMadeLogic.getModel();
         final Map<Point3i, Data> data = ShipLogic.getData(grid);
         final File baseDir = new File(spec.getEntity().getFile().getParentFile(), "DATA");
         String fName = spec.getEntity().getFile().getName();

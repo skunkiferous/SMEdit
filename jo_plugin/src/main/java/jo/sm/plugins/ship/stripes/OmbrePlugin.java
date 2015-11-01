@@ -23,6 +23,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
 
+import jo.sm.data.BlockSparseMatrix;
 import jo.sm.data.BlockTypes;
 import jo.sm.data.CubeIterator;
 import jo.sm.data.SparseMatrix;
@@ -70,7 +71,7 @@ public class OmbrePlugin implements IBlocksPlugin {
     }
 
     @Override
-    public void initParameterBean(SparseMatrix<Block> original, Object params,
+    public void initParameterBean(BlockSparseMatrix original, Object params,
             StarMade sm, IPluginCallback cb) {
     }
 
@@ -80,7 +81,7 @@ public class OmbrePlugin implements IBlocksPlugin {
     }
 
     @Override
-    public SparseMatrix<Block> modify(SparseMatrix<Block> original,
+    public BlockSparseMatrix modify(BlockSparseMatrix original,
             Object p, StarMade sm, IPluginCallback cb) {
         OmbreParameters params;
         params = (OmbreParameters) p;
@@ -95,8 +96,8 @@ public class OmbrePlugin implements IBlocksPlugin {
             original.getBounds(lower, upper);
         }
         cb.startTask((upper.x - lower.x + 1) * (upper.y - lower.y + 1) * (upper.z - lower.z + 1));
-        SparseMatrix<Block> modified;
-        modified = new SparseMatrix<>(original);
+        BlockSparseMatrix modified;
+        modified = new BlockSparseMatrix(original);
         for (Iterator<Point3i> i = new CubeIterator(lower, upper); i.hasNext();) {
             cb.workTask(1);
             Point3i xyz = i.next();

@@ -26,6 +26,7 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import jo.sm.data.BlockSparseMatrix;
 import jo.sm.data.ShapeLibraryEntry;
 import jo.sm.data.SparseMatrix;
 import jo.sm.logic.utils.FileUtils;
@@ -190,7 +191,7 @@ public class ShapeLibraryLogic {
         return null;
     }
 
-    public static void addEntry(SparseMatrix<Block> grid, String name, String author, int type) {
+    public static void addEntry(BlockSparseMatrix grid, String name, String author, int type) {
         Document doc = GridLogic.toDocument(grid);
         Node root = doc.getFirstChild();
         if (!StringUtils.isTrivial(name)) {

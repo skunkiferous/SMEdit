@@ -15,7 +15,7 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package jo.util;
+package jo.sm.edit.util;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -30,7 +30,8 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
-import jo.util.io.HttpClient;
+
+import jo.sm.edit.util.io.HttpClient;
 
 /**
  *
@@ -38,11 +39,15 @@ import jo.util.io.HttpClient;
  */
 public class Paths {
 
+    public static final String SM_JAR = "jo_sm.jar";
+    public static final String PLUGIN_JAR = "jo_plugin.jar";
+    public static final String STARTER_JAR = "SMEdit.jar";
+    public static final String SM_VERSION_FILE = "sm_version.txt";
+	
     public static final String ROOT = ".";
     public static final String RESOURCES = ROOT + File.separator + "resources";
-    public static final String SVERSION = RESOURCES + File.separator + "start_version.dat";
     private static Map<String, File> downloadCache;
-    private static final Logger log = Logger.getLogger(Paths.class.getName());
+    
     /* file locations */
     private static Properties mProps;
     private static File mStarMadeDir;
@@ -62,10 +67,11 @@ public class Paths {
 
     public static Map<String, File> getDownloadCaches() {
         if (downloadCache == null) {
-            downloadCache = new HashMap<>(8);
+            downloadCache = new HashMap<>();
             /* FILES */
-            downloadCache.put(URLs.DOWNLOAD, new File(getHomeDirectory(), "jo_sm.jar"));
-            downloadCache.put(URLs.DOWNLOADPLUG, new File(getPluginsDirectory(), "JoFileMods.jar"));
+            downloadCache.put(URLs.DOWNLOAD, getSmJarFile());
+            downloadCache.put(URLs.SVERSION, new File(getHomeDirectory(), Paths.SM_VERSION_FILE));
+            downloadCache.put(URLs.DOWNLOADPLUG, getPluginJarFile());
             downloadCache.put(URLs.ISANTH_HEAD, new File(getIsanthDirectory(), "header.smbph"));
             downloadCache.put(URLs.ISANTH_LOGIC, new File(getIsanthDirectory(), "logic.smbpl"));
             downloadCache.put(URLs.ISANTH_META, new File(getIsanthDirectory(), "meta.smbpm"));
@@ -93,6 +99,17 @@ public class Paths {
         }
         return Collections.unmodifiableMap(downloadCache);
     }
+    
+    /* Files */
+    
+    public static File getSmJarFile() {
+    	return new File(getHomeDirectory(), Paths.SM_JAR);
+    }
+    
+    public static File getPluginJarFile() {
+    	return new File(getPluginsDirectory(), Paths.PLUGIN_JAR);
+    }
+    
     /* folder directories */
 
     public static String getHomeDirectory() {
@@ -163,7 +180,6 @@ public class Paths {
 
     public static Properties getProps() {
         if (!validateCurrentDirectory()) {
-            Properties p = new Properties();
             File home = new File(System.getProperty("user.home"));
             File props = new File(home, ".josm");
             if (props.exists()) {

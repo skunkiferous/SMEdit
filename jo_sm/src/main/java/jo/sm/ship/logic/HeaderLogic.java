@@ -28,6 +28,7 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import jo.sm.data.BlockSparseMatrix;
 import jo.sm.data.BlockTypes;
 import jo.sm.data.SparseMatrix;
 import jo.sm.ship.data.Block;
@@ -104,7 +105,7 @@ public class HeaderLogic {
         }
     }
 
-    public static Header make(SparseMatrix<Block> grid) {
+    public static Header make(BlockSparseMatrix grid) {
         Point3i lower = new Point3i();
         Point3i upper = new Point3i();
         grid.getBounds(lower, upper);

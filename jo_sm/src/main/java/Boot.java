@@ -24,12 +24,16 @@ import java.io.IOException;
 import java.net.URLDecoder;
 import java.util.Properties;
 
+import javax.swing.UIManager;
+import javax.swing.UIManager.LookAndFeelInfo;
+
 public class Boot {
 
     private static Properties mProps;
 
     public static void loadProps() {
         File home = new File(System.getProperty("user.home"));
+        // XXX Where the user settings are stored
         File props = new File(home, ".josm");
         if (props.exists()) {
             mProps = new Properties();
@@ -49,9 +53,14 @@ public class Boot {
         loadProps();
         String location = Boot.class.getProtectionDomain().getCodeSource().getLocation().getPath();
         location = URLDecoder.decode(location, "UTF-8").replaceAll("\\\\", "/");
+        System.out.println("Running from: '"+location+"'");
         final String os = System.getProperty("os.name").toLowerCase();
-        final String flags = "-Xmx" + mProps.getProperty("memory", "") + "g";
-        //final String flags = "-Xmx2g";
+        String flags = "-Xmx" + mProps.getProperty("memory", "2") + "g";
+        if ("true".equalsIgnoreCase(mProps.getProperty("debug", "")) || "true".equalsIgnoreCase(System.getProperty("debug", ""))) {
+        	// 8000 is "default" Java debugging port
+        	System.out.println("DEBUGGING! The Application will wait for the debugger at port 8000 ...");
+        	flags = "-Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=y,address=8000 "+flags;
+        }
 
         if (os.contains("windows")) {
             Runtime.getRuntime().exec("javaw " + flags + " -classpath \""
@@ -63,8 +72,7 @@ public class Boot {
                 + " -classpath \"" + location + "\" jo.sm.ui.RenderFrame"});
         } else {
             Runtime.getRuntime().exec(new String[]{"/bin/sh",
-                "-c", "java " + flags + " -classpath \"" + location + "\" jo.sm.ui.RenderFramen"});
+                "-c", "java " + flags + " -classpath \"" + location + "\" jo.sm.ui.RenderFrame"});
         }
-
     }
 }

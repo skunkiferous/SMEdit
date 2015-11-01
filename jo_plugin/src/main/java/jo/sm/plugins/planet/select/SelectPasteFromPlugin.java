@@ -20,6 +20,7 @@ package jo.sm.plugins.planet.select;
 import java.io.IOException;
 import java.util.Map;
 
+import jo.sm.data.BlockSparseMatrix;
 import jo.sm.data.ShapeLibraryEntry;
 import jo.sm.data.SparseMatrix;
 import jo.sm.data.StarMade;
@@ -67,7 +68,7 @@ public class SelectPasteFromPlugin implements IBlocksPlugin {
     }
 
     @Override
-    public void initParameterBean(SparseMatrix<Block> original, Object params,
+    public void initParameterBean(BlockSparseMatrix original, Object params,
             StarMade sm, IPluginCallback cb) {
         Map<String, Object> shapeMap = ShapeLibraryLogic.getEntryMap();
         ((SelectPasteFromParameters) params).setShape((Integer) shapeMap.values().iterator().next());
@@ -79,7 +80,7 @@ public class SelectPasteFromPlugin implements IBlocksPlugin {
     }
 
     @Override
-    public SparseMatrix<Block> modify(SparseMatrix<Block> original, Object p,
+    public BlockSparseMatrix modify(BlockSparseMatrix original, Object p,
             StarMade sm, IPluginCallback cb) {
         SelectPasteFromParameters params = (SelectPasteFromParameters) p;
         Point3i lower = sm.getSelectedLower();
@@ -89,7 +90,7 @@ public class SelectPasteFromPlugin implements IBlocksPlugin {
             if (entry != null) {
                 try {
                     String xml = FileUtils.readFileAsString(entry.getShape().toString());
-                    SparseMatrix<Block> insertion = GridLogic.fromString(xml);
+                    BlockSparseMatrix insertion = GridLogic.fromString(xml);
                     GridLogic.insert(original, insertion, lower);
                     return original;
                 } catch (IOException ex) {

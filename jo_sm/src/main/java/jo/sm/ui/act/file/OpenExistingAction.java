@@ -19,6 +19,7 @@ package jo.sm.ui.act.file;
 
 import java.awt.event.ActionEvent;
 
+import jo.sm.data.BlockSparseMatrix;
 import jo.sm.data.SparseMatrix;
 import jo.sm.logic.RunnableLogic;
 import jo.sm.logic.StarMadeLogic;
@@ -56,7 +57,7 @@ public class OpenExistingAction extends GenericAction {
         IRunnableWithProgress t = new IRunnableWithProgress() {
             @Override
             public void run(IPluginCallback cb) {
-                SparseMatrix<Block> grid = ShipTreeLogic.loadShip(spec, cb);
+                BlockSparseMatrix grid = ShipTreeLogic.loadShip(spec, cb);
                 if (grid != null) {
                     StarMadeLogic.getInstance().setCurrentModel(spec);
                     StarMadeLogic.setModel(grid);

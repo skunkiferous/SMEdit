@@ -25,6 +25,7 @@ import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import jo.sm.data.BlockSparseMatrix;
 import jo.sm.data.BlockTypes;
 import jo.sm.data.BooleanMatrix3D;
 import jo.sm.data.SparseMatrix;
@@ -47,11 +48,11 @@ public class FillPlugin implements IBlocksPlugin {
                 {TYPE_SHIP, SUBTYPE_MODIFY},};
     private static final Logger log = Logger.getLogger(FillPlugin.class.getName());
 
-    public static void fill(SparseMatrix<Block> modified, List<Point3i> interior, int numBlocks, short controllerID, short blockID, FillStrategy fillStrategy) {
+    public static void fill(BlockSparseMatrix modified, List<Point3i> interior, int numBlocks, short controllerID, short blockID, FillStrategy fillStrategy) {
         fill(modified, interior, numBlocks, controllerID, blockID, fillStrategy, null);
     }
 
-    public static void fill(SparseMatrix<Block> modified, List<Point3i> interior, int numBlocks, short controllerID, short blockID, FillStrategy fillStrategy, IPluginCallback cb) {
+    public static void fill(BlockSparseMatrix modified, List<Point3i> interior, int numBlocks, short controllerID, short blockID, FillStrategy fillStrategy, IPluginCallback cb) {
         if (numBlocks <= 0) {
             return;
         }
@@ -68,7 +69,7 @@ public class FillPlugin implements IBlocksPlugin {
         }
     }
 
-    private static void place(SparseMatrix<Block> modified, List<Point3i> interior, short blockID) {
+    private static void place(BlockSparseMatrix modified, List<Point3i> interior, short blockID) {
         Block b = new Block();
         b.setBlockID(blockID);
         Point3i p = interior.get(0);
@@ -76,7 +77,7 @@ public class FillPlugin implements IBlocksPlugin {
         modified.set(p, b);
     }
 
-    public static void scopeInterior(SparseMatrix<Block> original, SparseMatrix<Block> modified, List<Point3i> interior, BooleanMatrix3D exterior, Point3i lower, Point3i upper, IPluginCallback cb) {
+    public static void scopeInterior(BlockSparseMatrix original, BlockSparseMatrix modified, List<Point3i> interior, BooleanMatrix3D exterior, Point3i lower, Point3i upper, IPluginCallback cb) {
         cb.setStatus("Calculating interior");
         cb.startTask(original.size());
         for (Iterator<Point3i> i = original.iterator(); i.hasNext();) {
@@ -128,7 +129,7 @@ public class FillPlugin implements IBlocksPlugin {
     }
 
     @Override
-    public void initParameterBean(SparseMatrix<Block> original, Object params, StarMade sm, IPluginCallback cb) {
+    public void initParameterBean(BlockSparseMatrix original, Object params, StarMade sm, IPluginCallback cb) {
     }
 
     @Override
@@ -137,9 +138,9 @@ public class FillPlugin implements IBlocksPlugin {
     }
 
     @Override
-    public SparseMatrix<Block> modify(SparseMatrix<Block> original, Object p, StarMade sm, IPluginCallback cb) {
+    public BlockSparseMatrix modify(BlockSparseMatrix original, Object p, StarMade sm, IPluginCallback cb) {
         FillParameters params = (FillParameters) p;
-        SparseMatrix<Block> modified = new SparseMatrix<>();
+        BlockSparseMatrix modified = new BlockSparseMatrix();
         List<Point3i> interior = new ArrayList<>();
         //Set<Point3i> exterior = HullLogic.findExterior(original, cb);
         BooleanMatrix3D exterior = HullLogic.findExteriorMatrix(original, cb);

@@ -19,6 +19,7 @@ package jo.sm.ship.logic;
 
 import java.util.Iterator;
 
+import jo.sm.data.BlockSparseMatrix;
 import jo.sm.data.BlockTypes;
 import jo.sm.data.BooleanMatrix3D;
 import jo.sm.data.CubeIterator;
@@ -50,7 +51,7 @@ public class SmoothLogic {
         new Point3i(0, 0, 1),
         new Point3i(0, 0, -1),};
 
-    public static void smooth(SparseMatrix<Block> grid, int scope, int type, StarMade sm, IPluginCallback cb) {
+    public static void smooth(BlockSparseMatrix grid, int scope, int type, StarMade sm, IPluginCallback cb) {
         //Set<Point3i> exterior = HullLogic.findExterior(grid, cb);
         BooleanMatrix3D exterior = HullLogic.findExteriorMatrix(grid, cb);
         boolean[] edges = new boolean[6];
@@ -102,7 +103,7 @@ public class SmoothLogic {
         cb.endTask();
     }
 
-    private static void doCorner(SparseMatrix<Block> grid, Point3i p, boolean[] edges) {
+    private static void doCorner(BlockSparseMatrix grid, Point3i p, boolean[] edges) {
         int ori = -1;
         if (edges[RenderTile.XM]) {
             if (edges[RenderTile.YM]) {
@@ -143,7 +144,7 @@ public class SmoothLogic {
         grid.set(p, b);
     }
 
-    private static void doWedge(SparseMatrix<Block> grid, Point3i p, boolean[] edges) {
+    private static void doWedge(BlockSparseMatrix grid, Point3i p, boolean[] edges) {
         int ori = -1;
         if (edges[RenderTile.XM]) {
             if (edges[RenderTile.YM]) {
@@ -189,7 +190,7 @@ public class SmoothLogic {
 
     }
 
-    private static short calculateWedgeType(SparseMatrix<Block> grid, Point3i p,
+    private static short calculateWedgeType(BlockSparseMatrix grid, Point3i p,
             boolean[] edges) {
         short type1 = -1;
         short type2 = -1;
@@ -273,7 +274,7 @@ public class SmoothLogic {
         return type1;
     }
 
-    private static short calculateCornerType(SparseMatrix<Block> grid, Point3i p,
+    private static short calculateCornerType(BlockSparseMatrix grid, Point3i p,
             boolean[] edges) {
         short type1 = -1;
         short type2 = -1;
@@ -364,7 +365,7 @@ public class SmoothLogic {
         return type1;
     }
 
-    private static boolean isEdge(SparseMatrix<Block> grid, Point3i p, Point3i d) {
+    private static boolean isEdge(BlockSparseMatrix grid, Point3i p, Point3i d) {
         Point3i p2 = new Point3i();
         p2.add(p, d);
         if (!grid.contains(p2)) {

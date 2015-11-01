@@ -28,6 +28,7 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import jo.sm.data.BlockSparseMatrix;
 import jo.sm.data.SparseMatrix;
 import jo.sm.data.StarMade;
 import jo.sm.logic.utils.IntegerUtils;
@@ -85,7 +86,7 @@ public class ImportSchematicPlugin implements IBlocksPlugin {
     }
 
     @Override
-    public void initParameterBean(SparseMatrix<Block> original, Object params,
+    public void initParameterBean(BlockSparseMatrix original, Object params,
             StarMade sm, IPluginCallback cb) {
     }
 
@@ -95,7 +96,7 @@ public class ImportSchematicPlugin implements IBlocksPlugin {
     }
 
     @Override
-    public SparseMatrix<Block> modify(SparseMatrix<Block> original,
+    public BlockSparseMatrix modify(BlockSparseMatrix original,
             Object p, StarMade sm, IPluginCallback cb) {
         readData(sm);
         ImportSchematicParameters params;
@@ -108,8 +109,8 @@ public class ImportSchematicPlugin implements IBlocksPlugin {
                 center.add(sm.getSelectedUpper());
                 center.scale(1, 2);
             }
-            SparseMatrix<Block> modified;
-            modified = new SparseMatrix<>();
+            BlockSparseMatrix modified;
+            modified = new BlockSparseMatrix();
             readFile(params.getFile(), modified, center, cb);
             ShipLogic.ensureCore(modified);
             return modified;
@@ -119,7 +120,7 @@ public class ImportSchematicPlugin implements IBlocksPlugin {
         }
     }
 
-    private void readFile(String objFile, SparseMatrix<Block> grid, Point3i center, IPluginCallback cb) throws Exception {
+    private void readFile(String objFile, BlockSparseMatrix grid, Point3i center, IPluginCallback cb) throws Exception {
         Tag.Compound schematic;
         try {
             try (DataInputStream rdr = new DataInputStream(new FileInputStream(new File(objFile)))) {
@@ -210,7 +211,7 @@ public class ImportSchematicPlugin implements IBlocksPlugin {
                 int mcBlockNum;
                 mcBlockNum = IntegerUtils.parseInt(mcBlock);
                 if (mcBlockNum != 0) {
-                    map.mMCBlock = IntegerUtils.parseInt(mcBlock);
+                    map.mMCBlock = mcBlockNum;
                 } else {
                     log.log(Level.WARNING, "Unknown MC Block type: " + mcBlock);
                     continue;

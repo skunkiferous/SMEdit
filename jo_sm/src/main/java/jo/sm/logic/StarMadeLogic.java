@@ -33,13 +33,12 @@ import java.util.jar.Manifest;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import jo.sm.data.SparseMatrix;
+import jo.sm.data.BlockSparseMatrix;
 import jo.sm.data.StarMade;
 import jo.sm.logic.utils.BooleanUtils;
 import jo.sm.mods.IBlocksPlugin;
 import jo.sm.mods.IStarMadePlugin;
 import jo.sm.mods.IStarMadePluginFactory;
-import jo.sm.ship.data.Block;
 import jo.util.Paths;
 
 
@@ -121,9 +120,9 @@ public class StarMadeLogic {
             }
             addBlocksPlugin(plugin);
             return true;
-        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException e) {
-            log.log(Level.WARNING, "plugin failed!", e);
-            e.printStackTrace();
+        } catch (Throwable t) {
+            log.log(Level.WARNING, "plugin "+blocksPluginClassName+" failed!", t);
+            t.printStackTrace();
             return false;
         }
 
@@ -141,9 +140,9 @@ public class StarMadeLogic {
             }
             getInstance().getPluginFactories().add(factory);
             return true;
-        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException e) {
-            log.log(Level.WARNING, "pluginFactory failed!", e);
-            e.printStackTrace();
+        } catch (Throwable t) {
+            log.log(Level.WARNING, "pluginFactory "+pluginFactoryClassName+" failed!", t);
+            t.printStackTrace();
             return false;
         }
 
@@ -304,11 +303,11 @@ public class StarMadeLogic {
         return ((class1 == IBlocksPlugin.TYPE_ALL) || (class1 == class2));
     }
 
-    public static SparseMatrix<Block> getModel() {
+    public static BlockSparseMatrix getModel() {
         return getInstance().getModel();
     }
 
-    public static void setModel(SparseMatrix<Block> model) {
+    public static void setModel(BlockSparseMatrix model) {
         getInstance().setModel(model);
     }
 }

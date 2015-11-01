@@ -695,6 +695,14 @@ public class BlockTypeColors {
             try (InputStream is = new FileInputStream(propsFile)) {
                 mBlockTypes.load(is);
             }
+            @SuppressWarnings({ "unchecked", "rawtypes" })
+			final Map<String,String> mbt = (Map<String,String>) (Map) mBlockTypes;
+            for (String prop : new ArrayList<>(mbt.keySet())) {
+            	String toUpper = prop.toUpperCase();
+            	if (!prop.equals(toUpper)) {
+            		mBlockTypes.setProperty(toUpper, mbt.get(prop));
+            	}
+            }
             File xmlFile = new File(StarMadeLogic.getInstance().getBaseDir(), "data/config/BlockConfig.xml");
             Document doc = XMLUtils.readFile(xmlFile);
             for (Node n : XMLUtils.findAllNodesRecursive(doc, "Block")) {
@@ -713,7 +721,7 @@ public class BlockTypeColors {
                 BLOCK_HITPOINTS.put(id, hitPoints);
                 BLOCK_TEXTURE_IDS.put(id, textureID);
                 try {
-                    Field f = BlockTypes.class.getField(type);
+                    Field f = BlockTypes.class.getField(type.toUpperCase());
                     if (f != null) {
                         f.setShort(null, id);
                     }

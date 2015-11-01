@@ -17,6 +17,7 @@
  **/
 package jo.sm.ui.act.plugin;
 
+import jo.sm.data.BlockSparseMatrix;
 import jo.sm.data.SparseMatrix;
 import jo.sm.data.StarMade;
 import jo.sm.mods.IBlocksPlugin;
@@ -28,5 +29,5 @@ import jo.sm.ship.data.Block;
  **/
 public interface IPluginInvocationListener {
 
-    public void pluginInvoked(IBlocksPlugin plugin, SparseMatrix<Block> original, Object params, StarMade sm, IPluginCallback cb);
+    public void pluginInvoked(IBlocksPlugin plugin, BlockSparseMatrix original, Object params, StarMade sm, IPluginCallback cb);
 }

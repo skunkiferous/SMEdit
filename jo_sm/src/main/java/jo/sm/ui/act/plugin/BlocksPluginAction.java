@@ -30,6 +30,7 @@ import java.util.Properties;
 
 import javax.swing.JFrame;
 
+import jo.sm.data.BlockSparseMatrix;
 import jo.sm.data.SparseMatrix;
 import jo.sm.data.StarMade;
 import jo.sm.logic.RunnableLogic;
@@ -79,11 +80,11 @@ public class BlocksPluginAction extends GenericAction {
                 @Override
                 public void run(IPluginCallback cb) {
                     try {
-                        SparseMatrix<Block> original = StarMadeLogic.getModel();
+                        BlockSparseMatrix original = StarMadeLogic.getModel();
                         mPanel.getUndoer().checkpoint(original);
                         StarMade sm = StarMadeLogic.getInstance();
                         pluginInvoked(mPlugin, original, params, sm, cb);
-                        SparseMatrix<Block> modified = mPlugin.modify(original, params, sm, cb);
+                        BlockSparseMatrix modified = mPlugin.modify(original, params, sm, cb);
                         if (!cb.isPleaseCancel()) {
                             if (modified != null) {
                                 StarMadeLogic.setModel(modified);
@@ -237,7 +238,7 @@ public class BlocksPluginAction extends GenericAction {
         mListeners.remove(listener);
     }
 
-    private void pluginInvoked(IBlocksPlugin plugin, SparseMatrix<Block> original, Object params, StarMade sm, IPluginCallback cb) {
+    private void pluginInvoked(IBlocksPlugin plugin, BlockSparseMatrix original, Object params, StarMade sm, IPluginCallback cb) {
         for (IPluginInvocationListener listener : mListeners.toArray(new IPluginInvocationListener[0])) {
             listener.pluginInvoked(plugin, original, params, sm, cb);
         }

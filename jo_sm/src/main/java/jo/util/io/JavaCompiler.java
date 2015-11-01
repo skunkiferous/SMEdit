@@ -68,8 +68,7 @@ public class JavaCompiler {
                     new URL(
                             source
                             + "?v="
-                            + Integer.toString(GlobalConfiguration
-                                    .getVersion()) + "&s="
+                            + GlobalConfiguration.getVersion() + "&s="
                             + URLEncoder.encode(source, "UTF-8")), out);
         } catch (final IOException ignored) {
             return false;

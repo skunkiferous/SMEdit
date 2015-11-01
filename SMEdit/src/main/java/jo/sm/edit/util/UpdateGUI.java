@@ -15,7 +15,7 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package jo.util;
+package jo.sm.edit.util;
 
 import java.awt.Dimension;
 import javax.swing.BorderFactory;
@@ -45,7 +45,7 @@ public class UpdateGUI extends JFrame {
         setIconImage(GlobalConfiguration.getImage(Resources.ICON));
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         setResizable(false);
-        setTitle("SMEdit Updater");
+        setTitle(GlobalConfiguration.NAME+" Updater");
 
         JPanel panel1 = new JPanel();
         panel1.setBorder(BorderFactory.createTitledBorder(" Downloading update... "));
@@ -53,7 +53,7 @@ public class UpdateGUI extends JFrame {
         panel1.setPreferredSize(new Dimension(210, 500));
         panel1.setRequestFocusEnabled(false);
         jLabel1.setIcon(new ImageIcon(GlobalConfiguration.getImage(Resources.DOWNLOAD)));
-        jLabel2.setText("Please be patient wile your new App is being downloaded");
+        jLabel2.setText("Please be patient while your new App is being downloaded");
         jLabel3.setText("");
 
         GroupLayout jPanel1Layout = new GroupLayout(panel1);

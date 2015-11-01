@@ -28,6 +28,7 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import jo.sm.data.BlockSparseMatrix;
 import jo.sm.data.SparseMatrix;
 import jo.sm.data.StarMade;
 import jo.sm.mods.IPluginCallback;
@@ -111,7 +112,7 @@ public class BlueprintLogic {
         return bp;
     }
 
-    public static void saveBlueprint(SparseMatrix<Block> grid, ShipSpec spec, boolean def, IPluginCallback cb) {
+    public static void saveBlueprint(BlockSparseMatrix grid, ShipSpec spec, boolean def, IPluginCallback cb) {
         try {
             Map<Point3i, Data> data = ShipLogic.getData(grid);
             File baseDir = spec.getFile();

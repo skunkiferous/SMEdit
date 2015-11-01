@@ -23,6 +23,7 @@ import java.awt.datatransfer.Transferable;
 import java.awt.datatransfer.UnsupportedFlavorException;
 import java.io.IOException;
 
+import jo.sm.data.BlockSparseMatrix;
 import jo.sm.data.SparseMatrix;
 import jo.sm.data.StarMade;
 import jo.sm.logic.GridLogic;
@@ -67,7 +68,7 @@ public class SelectPastePlugin implements IBlocksPlugin {
     }
 
     @Override
-    public void initParameterBean(SparseMatrix<Block> original, Object params,
+    public void initParameterBean(BlockSparseMatrix original, Object params,
             StarMade sm, IPluginCallback cb) {
     }
 
@@ -77,7 +78,7 @@ public class SelectPastePlugin implements IBlocksPlugin {
     }
 
     @Override
-    public SparseMatrix<Block> modify(SparseMatrix<Block> original, Object p,
+    public BlockSparseMatrix modify(BlockSparseMatrix original, Object p,
             StarMade sm, IPluginCallback cb) {
         Point3i lower = sm.getSelectedLower();
         Point3i upper = sm.getSelectedUpper();
@@ -90,7 +91,7 @@ public class SelectPastePlugin implements IBlocksPlugin {
                 try {
                     String xml;
                     xml = (String) contents.getTransferData(DataFlavor.stringFlavor);
-                    SparseMatrix<Block> insertion = GridLogic.fromString(xml);
+                    BlockSparseMatrix insertion = GridLogic.fromString(xml);
                     GridLogic.insert(original, insertion, lower);
                     return original;
                 } catch (UnsupportedFlavorException | IOException ex) {

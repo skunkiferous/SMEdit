@@ -21,6 +21,7 @@ import java.util.Iterator;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import jo.sm.data.BlockSparseMatrix;
 import jo.sm.data.BlockTypes;
 import jo.sm.data.SparseMatrix;
 import jo.sm.data.StarMade;
@@ -65,7 +66,7 @@ public class ReflectPlugin implements IBlocksPlugin {
     }
 
     @Override
-    public void initParameterBean(SparseMatrix<Block> original, Object params,
+    public void initParameterBean(BlockSparseMatrix original, Object params,
             StarMade sm, IPluginCallback cb) {
     }
 
@@ -75,11 +76,11 @@ public class ReflectPlugin implements IBlocksPlugin {
     }
 
     @Override
-    public SparseMatrix<Block> modify(SparseMatrix<Block> original,
+    public BlockSparseMatrix modify(BlockSparseMatrix original,
             Object p, StarMade sm, IPluginCallback cb) {
         ReflectParameters params;
         params = (ReflectParameters) p;
-        SparseMatrix<Block> modified;
+        BlockSparseMatrix modified;
         if ((sm.getSelectedLower() == null) || (sm.getSelectedUpper() == null)) {
             Point3i core;
             core = findCore(original);
@@ -94,8 +95,8 @@ public class ReflectPlugin implements IBlocksPlugin {
             center = new Point3i(lower);
             center.add(upper);
             center.scale(1, 2);
-            modified = new SparseMatrix<>(original);
-            SparseMatrix<Block> grid = GridLogic.extract(modified, lower, upper);
+            modified = new BlockSparseMatrix(original);
+            BlockSparseMatrix grid = GridLogic.extract(modified, lower, upper);
             GridLogic.delete(modified, lower, upper);
             grid = reflectAround(grid, params, center);
             GridLogic.insert(modified, grid, lower);
@@ -104,10 +105,10 @@ public class ReflectPlugin implements IBlocksPlugin {
         return modified;
     }
 
-    private SparseMatrix<Block> reflectAround(SparseMatrix<Block> original,
+    private BlockSparseMatrix reflectAround(BlockSparseMatrix original,
             ReflectParameters params, Point3i around) {
-        SparseMatrix<Block> modified;
-        modified = new SparseMatrix<>();
+        BlockSparseMatrix modified;
+        modified = new BlockSparseMatrix();
         for (Iterator<Point3i> i = original.iteratorNonNull(); i.hasNext();) {
             Point3i inPoint;
             inPoint = i.next();
@@ -167,7 +168,7 @@ public class ReflectPlugin implements IBlocksPlugin {
         return n;
     }
 
-    private Point3i findCore(SparseMatrix<Block> grid) {
+    private Point3i findCore(BlockSparseMatrix grid) {
         for (Iterator<Point3i> i = grid.iteratorNonNull(); i.hasNext();) {
             Point3i xyz;
             xyz = i.next();

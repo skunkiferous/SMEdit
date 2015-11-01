@@ -21,6 +21,7 @@ import java.util.Iterator;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import jo.sm.data.BlockSparseMatrix;
 import jo.sm.data.BlockTypes;
 import jo.sm.data.SparseMatrix;
 import jo.sm.data.StarMade;
@@ -50,7 +51,7 @@ public class RotatePlugin implements IBlocksPlugin {
                 {TYPE_STATION, SUBTYPE_MODIFY},};
     private static final Logger log = Logger.getLogger(RotatePlugin.class.getName());
 
-    public static SparseMatrix<Block> rotateAround(SparseMatrix<Block> original, RotateParameters params, Point3i around) {
+    public static BlockSparseMatrix rotateAround(BlockSparseMatrix original, RotateParameters params, Point3i around) {
         Point4i inPoint;
         inPoint = new Point4i();
         Point4i outPoint;
@@ -62,7 +63,7 @@ public class RotatePlugin implements IBlocksPlugin {
         t.rotateEuler(params.getXRotate(), params.getYRotate(), params.getZRotate());
         t.translate(around.x, around.y, around.z);
         log.log(Level.INFO, "Matrix: ", t);
-        SparseMatrix<Block> modified = new SparseMatrix<Block>();
+        BlockSparseMatrix modified = new BlockSparseMatrix();
         for (Iterator<Point3i> i = original.iteratorNonNull(); i.hasNext();) {
             Point3i xyz;
             xyz = i.next();
@@ -120,7 +121,7 @@ public class RotatePlugin implements IBlocksPlugin {
     }
 
     @Override
-    public void initParameterBean(SparseMatrix<Block> original, Object params, StarMade sm, IPluginCallback cb) {
+    public void initParameterBean(BlockSparseMatrix original, Object params, StarMade sm, IPluginCallback cb) {
     }
 
     @Override
@@ -129,10 +130,10 @@ public class RotatePlugin implements IBlocksPlugin {
     }
 
     @Override
-    public SparseMatrix<Block> modify(SparseMatrix<Block> original, Object p, StarMade sm, IPluginCallback cb) {
+    public BlockSparseMatrix modify(BlockSparseMatrix original, Object p, StarMade sm, IPluginCallback cb) {
         RotateParameters params;
         params = (RotateParameters) p;
-        SparseMatrix<Block> modified;
+        BlockSparseMatrix modified;
         if ((sm.getSelectedLower() == null) || (sm.getSelectedUpper() == null)) {
             Point3i core;
             core = findCore(original);
@@ -147,8 +148,8 @@ public class RotatePlugin implements IBlocksPlugin {
             center = new Point3i(lower);
             center.add(upper);
             center.scale(1, 2);
-            modified = new SparseMatrix<>(original);
-            SparseMatrix<Block> grid;
+            modified = new BlockSparseMatrix(original);
+            BlockSparseMatrix grid;
             grid = GridLogic.extract(modified, lower, upper);
             GridLogic.delete(modified, lower, upper);
             grid = rotateAround(grid, params, center);
@@ -158,7 +159,7 @@ public class RotatePlugin implements IBlocksPlugin {
         return modified;
     }
 
-    private Point3i findCore(SparseMatrix<Block> grid) {
+    private Point3i findCore(BlockSparseMatrix grid) {
         for (Iterator<Point3i> i = grid.iteratorNonNull(); i.hasNext();) {
             Point3i xyz;
             xyz = i.next();

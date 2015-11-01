@@ -25,6 +25,7 @@ import java.util.List;
 
 import javax.swing.ImageIcon;
 
+import jo.sm.data.BlockSparseMatrix;
 import jo.sm.data.RenderPoly;
 import jo.sm.data.SparseMatrix;
 import jo.sm.ship.data.Block;
@@ -40,13 +41,13 @@ import jo.vecmath.logic.MathUtils;
 
 public class LWJGLRenderQuadLogic {
 
-    public static void addBlocks(JGLGroup group, SparseMatrix<Block> grid) {
+    public static void addBlocks(JGLGroup group, BlockSparseMatrix grid) {
         for (Iterator<Point3i> i = grid.iteratorNonNull(); i.hasNext();) {
             addBlock(group, grid, i.next());
         }
     }
 
-    public static void addBlock(JGLGroup group, SparseMatrix<Block> grid, Point3i p) {
+    public static void addBlock(JGLGroup group, BlockSparseMatrix grid, Point3i p) {
         Block b = grid.get(p);
         if (b == null) {
             return;

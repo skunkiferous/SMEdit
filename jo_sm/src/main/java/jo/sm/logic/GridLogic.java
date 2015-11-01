@@ -29,6 +29,7 @@ import java.util.zip.GZIPOutputStream;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 
+import jo.sm.data.BlockSparseMatrix;
 import jo.sm.data.CubeIterator;
 import jo.sm.data.SparseMatrix;
 import jo.sm.logic.utils.StreamUtils;
@@ -44,8 +45,8 @@ import jo.vecmath.Point3i;
 public class GridLogic {
     private static final Logger log = Logger.getLogger(GridLogic.class.getName());
 
-    public static SparseMatrix<Block> extract(SparseMatrix<Block> grid, Point3i lower, Point3i upper) {
-        SparseMatrix<Block> subset = new SparseMatrix<>();
+    public static BlockSparseMatrix extract(BlockSparseMatrix grid, Point3i lower, Point3i upper) {
+        BlockSparseMatrix subset = new BlockSparseMatrix();
         for (Iterator<Point3i> i = new CubeIterator(lower, upper); i.hasNext();) {
             Point3i p = i.next();
             subset.set(p, grid.get(p));
@@ -53,7 +54,7 @@ public class GridLogic {
         return subset;
     }
 
-    public static void insert(SparseMatrix<Block> grid, SparseMatrix<Block> insertion, Point3i lowerInsertionPoint) {
+    public static void insert(BlockSparseMatrix grid, BlockSparseMatrix insertion, Point3i lowerInsertionPoint) {
         Point3i lower = new Point3i();
         Point3i upper = new Point3i();
         insertion.getBounds(lower, upper);
@@ -70,12 +71,12 @@ public class GridLogic {
         }
     }
 
-    public static String toString(SparseMatrix<Block> grid) {
+    public static String toString(BlockSparseMatrix grid) {
         Document doc = toDocument(grid);
         return XMLUtils.writeString(doc.getFirstChild());
     }
 
-    public static Document toDocument(SparseMatrix<Block> grid) {
+    public static Document toDocument(BlockSparseMatrix grid) {
         Point3i lower = new Point3i();
         Point3i upper = new Point3i();
         grid.getBounds(lower, upper);
@@ -96,8 +97,8 @@ public class GridLogic {
         return doc;
     }
 
-    public static SparseMatrix<Block> fromString(String xml) {
-        SparseMatrix<Block> grid = new SparseMatrix<>();
+    public static BlockSparseMatrix fromString(String xml) {
+        BlockSparseMatrix grid = new BlockSparseMatrix();
         Document doc = XMLUtils.readString(xml);
         for (Node block : XMLUtils.findNodes(doc, "blocks/block")) {
             String[] xyz = XMLUtils.getAttribute(block, "location").split(",");
@@ -113,7 +114,7 @@ public class GridLogic {
         return grid;
     }
 
-    public static byte[] toBytes(SparseMatrix<Block> grid) {
+    public static byte[] toBytes(BlockSparseMatrix grid) {
         try {
             ByteArrayOutputStream baos;
             GZIPOutputStream os;
@@ -131,7 +132,7 @@ public class GridLogic {
         }
     }
 
-    public static SparseMatrix<Block> fromBytes(byte[] bytes) {
+    public static BlockSparseMatrix fromBytes(byte[] bytes) {
         try {
             ByteArrayOutputStream os;
             try (GZIPInputStream is = new GZIPInputStream(new ByteArrayInputStream(bytes))) {
@@ -147,7 +148,7 @@ public class GridLogic {
         }
     }
 
-    public static void delete(SparseMatrix<Block> grid, Point3i lower, Point3i upper) {
+    public static void delete(BlockSparseMatrix grid, Point3i lower, Point3i upper) {
         for (Iterator<Point3i> i = new CubeIterator(lower, upper); i.hasNext();) {
             Point3i p = i.next();
             grid.set(p, null);

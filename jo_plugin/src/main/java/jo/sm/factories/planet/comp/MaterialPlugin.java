@@ -23,6 +23,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
+import jo.sm.data.BlockSparseMatrix;
 import jo.sm.data.SparseMatrix;
 import jo.sm.data.StarMade;
 import jo.sm.mods.IBlocksPlugin;
@@ -74,7 +75,7 @@ public class MaterialPlugin implements IBlocksPlugin {
     }
 
     @Override
-    public void initParameterBean(SparseMatrix<Block> original, Object params,
+    public void initParameterBean(BlockSparseMatrix original, Object params,
             StarMade sm, IPluginCallback cb) {
     }
 
@@ -87,9 +88,9 @@ public class MaterialPlugin implements IBlocksPlugin {
     }
 
     @Override
-    public SparseMatrix<Block> modify(SparseMatrix<Block> original,
+    public BlockSparseMatrix modify(BlockSparseMatrix original,
             Object params, StarMade sm, IPluginCallback cb) {
-        SparseMatrix<Block> modified = new SparseMatrix<>(original);
+        BlockSparseMatrix modified = new BlockSparseMatrix(original);
         Point3i lower = new Point3i();
         Point3i upper = new Point3i();
         original.getBounds(lower, upper);
@@ -121,7 +122,7 @@ public class MaterialPlugin implements IBlocksPlugin {
         return modified;
     }
 
-    private int getLowY(SparseMatrix<Block> grid, int x, int z, int y1,
+    private int getLowY(BlockSparseMatrix grid, int x, int z, int y1,
             int y2) {
         for (int y = y1; y <= y2; y++) {
             if (grid.contains(x, y, z)) {
@@ -131,7 +132,7 @@ public class MaterialPlugin implements IBlocksPlugin {
         return y1 - 1;
     }
 
-    private int getHighY(SparseMatrix<Block> grid, int x, int z, int y1,
+    private int getHighY(BlockSparseMatrix grid, int x, int z, int y1,
             int y2) {
         for (int y = y2; y >= y1; y--) {
             if (grid.contains(x, y, z)) {

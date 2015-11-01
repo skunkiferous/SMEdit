@@ -21,6 +21,7 @@ import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import jo.sm.data.BlockSparseMatrix;
 import jo.sm.data.SparseMatrix;
 import jo.sm.data.StarMade;
 import jo.sm.mods.IBlocksPlugin;
@@ -65,7 +66,7 @@ public class ImportOBJPlugin implements IBlocksPlugin {
     }
 
     @Override
-    public void initParameterBean(SparseMatrix<Block> original, Object params,
+    public void initParameterBean(BlockSparseMatrix original, Object params,
             StarMade sm, IPluginCallback cb) {
     }
 
@@ -75,7 +76,7 @@ public class ImportOBJPlugin implements IBlocksPlugin {
     }
 
     @Override
-    public SparseMatrix<Block> modify(SparseMatrix<Block> original,
+    public BlockSparseMatrix modify(BlockSparseMatrix original,
             Object p, StarMade sm, IPluginCallback cb) {
         ImportOBJParameters params;
         params = (ImportOBJParameters) p;
@@ -94,7 +95,7 @@ public class ImportOBJPlugin implements IBlocksPlugin {
             offset = new Point3i();
             float scale;
             scale = PlotLogic.getScale(hull, params.getLongestDimension(), lowerGrid, upperGrid, offset);
-            SparseMatrix<Block> modified = new SparseMatrix<>();
+            BlockSparseMatrix modified = new BlockSparseMatrix();
             PlotLogic.mapHull(modified, hull, new Point3f(scale, scale, scale), lowerGrid, upperGrid, cb);
             ShipLogic.ensureCore(modified);
             return modified;

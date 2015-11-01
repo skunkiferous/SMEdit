@@ -1,0 +1,112 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<artifactId>jo_sm</artifactId>
+	<name>jo_sm</name>
+	<description>A modernized version of SMEdit Classic.</description>
+	<url>https://github.com/skunkiferous/SMEdit</url>
+	<packaging>jar</packaging>
+	<inceptionYear>2015</inceptionYear>
+	<organization>
+		<name>Sebastien Diot</name>
+	</organization>
+
+	<scm>
+		<connection>scm:git:git@github.com:skunkiferous/SMEdit.git</connection>
+		<developerConnection>scm:git:git@github.com:skunkiferous/SMEdit.git</developerConnection>
+		<url>git@github.com:skunkiferous/SMEdit.git</url>
+	</scm>
+
+	<developers>
+		<developer>
+			<id>skunkiferous</id>
+			<name>Sebastien Diot</name>
+			<email>monster@shadowdemon.com</email>
+		</developer>
+	</developers>
+
+	<licenses>
+		<license>
+			<name>The Apache Software License, Version 2.0</name>
+			<url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+			<distribution>repo</distribution>
+			<comments>A business-friendly OSS license</comments>
+		</license>
+	</licenses>
+
+	<parent>
+		<groupId>com.blockwithme</groupId>
+		<artifactId>SMEdit-Parent</artifactId>
+		<version>1.0.0</version>
+		<relativePath>..</relativePath>
+	</parent>
+
+	<dependencies>
+		<dependency>
+			<groupId>org.lwjgl.lwjgl</groupId>
+			<artifactId>lwjgl</artifactId>
+			<version>2.9.1</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.lwjgl.lwjgl</groupId>
+			<artifactId>lwjgl_util</artifactId>
+			<version>2.9.1</version>
+		</dependency>
+
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>3.8.1</version>
+			<scope>test</scope>
+		</dependency>
+
+	</dependencies>
+
+	<build>
+		<finalName>${project.artifactId}</finalName>
+		
+		<resources>
+			<resource>
+				<directory>.</directory>
+				<includes>
+					<include>resources/**/*</include>
+				</includes>
+			</resource>
+		</resources>
+
+		<plugins>
+			<plugin>
+				<artifactId>maven-compiler-plugin</artifactId>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-jar-plugin</artifactId>
+				<configuration>
+					<archive>
+						<manifest>
+							<mainClass>Boot</mainClass>
+						</manifest>
+					</archive>
+				</configuration>
+			</plugin>
+<!-- 
+			<plugin>
+				<groupId>com.googlecode.mavennatives</groupId>
+				<artifactId>maven-nativedependencies-plugin</artifactId>
+				<version>0.0.5</version>
+				<executions>
+					<execution>
+						<id>unpacknatives</id>
+						<phase>generate-resources</phase>
+						<goals>
+							<goal>copy</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+ -->
+		</plugins>
+	</build>
+</project>

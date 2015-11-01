@@ -20,6 +20,7 @@ package jo.sm.plugins.planet.hollow;
 import java.util.Iterator;
 import java.util.Set;
 
+import jo.sm.data.BlockSparseMatrix;
 import jo.sm.data.BlockTypes;
 import jo.sm.data.BooleanMatrix3D;
 import jo.sm.data.SparseMatrix;
@@ -67,7 +68,7 @@ public class HollowPlugin implements IBlocksPlugin {
     }
 
     @Override
-    public void initParameterBean(SparseMatrix<Block> original, Object params,
+    public void initParameterBean(BlockSparseMatrix original, Object params,
             StarMade sm, IPluginCallback cb) {
     }
 
@@ -77,15 +78,15 @@ public class HollowPlugin implements IBlocksPlugin {
     }
 
     @Override
-    public SparseMatrix<Block> modify(SparseMatrix<Block> original,
+    public BlockSparseMatrix modify(BlockSparseMatrix original,
             Object p, StarMade sm, IPluginCallback cb) {
-        SparseMatrix<Block> modified;
-        modified = new SparseMatrix<>(original);
+        BlockSparseMatrix modified;
+        modified = new BlockSparseMatrix(original);
         doHollow(modified, cb);
         return modified;
     }
 
-    public static void doHollow(SparseMatrix<Block> grid, IPluginCallback cb) {
+    public static void doHollow(BlockSparseMatrix grid, IPluginCallback cb) {
         //Set<Point3i> exterior;
         //exterior = HullLogic.findExterior(grid, cb);
         BooleanMatrix3D exterior = HullLogic.findExteriorMatrix(grid, cb);

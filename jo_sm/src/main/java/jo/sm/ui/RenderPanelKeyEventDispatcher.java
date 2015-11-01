@@ -22,6 +22,8 @@ import java.awt.KeyEventDispatcher;
 import java.awt.Window;
 import java.awt.event.KeyEvent;
 import java.util.logging.Logger;
+
+import jo.sm.data.BlockSparseMatrix;
 import jo.sm.data.SparseMatrix;
 import jo.sm.logic.GridLogic;
 import jo.sm.logic.StarMadeLogic;
@@ -116,7 +118,7 @@ public class RenderPanelKeyEventDispatcher implements KeyEventDispatcher {
 
     private void doNudgeSelection(int keyCode, Point3i lower, Point3i upper) {
         mPanel.getUndoer().checkpoint(StarMadeLogic.getModel());
-        SparseMatrix<Block> clip = GridLogic.extract(StarMadeLogic.getModel(), lower, upper);
+        BlockSparseMatrix clip = GridLogic.extract(StarMadeLogic.getModel(), lower, upper);
         GridLogic.delete(StarMadeLogic.getModel(), lower, upper);
         keyToDelta(keyCode, lower);
         keyToDelta(keyCode, upper);

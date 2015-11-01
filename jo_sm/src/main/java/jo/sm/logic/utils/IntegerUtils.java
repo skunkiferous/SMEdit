@@ -55,6 +55,10 @@ public class IntegerUtils {
             if (o >= 0) {
                 str = str.substring(0, o);
             }
+            int c = str.indexOf(',');
+            if (c >= 0) {
+                str = str.substring(0, c);
+            }
             return Integer.parseInt(str);
         } catch (NumberFormatException e) {
             return 0;

@@ -21,6 +21,7 @@ import java.util.Iterator;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import jo.sm.data.BlockSparseMatrix;
 import jo.sm.data.BlockTypes;
 import jo.sm.data.CubeIterator;
 import jo.sm.data.SparseMatrix;
@@ -67,7 +68,7 @@ public class DuplicatePlugin implements IBlocksPlugin {
     }
 
     @Override
-    public void initParameterBean(SparseMatrix<Block> original, Object params,
+    public void initParameterBean(BlockSparseMatrix original, Object params,
             StarMade sm, IPluginCallback cb) {
     }
 
@@ -77,12 +78,12 @@ public class DuplicatePlugin implements IBlocksPlugin {
     }
 
     @Override
-    public SparseMatrix<Block> modify(SparseMatrix<Block> original,
+    public BlockSparseMatrix modify(BlockSparseMatrix original,
             Object p, StarMade sm, IPluginCallback cb) {
         DuplicateParameters params;
         params = (DuplicateParameters) p;
-        SparseMatrix<Block> modified;
-        modified = new SparseMatrix<>(original);
+        BlockSparseMatrix modified;
+        modified = new BlockSparseMatrix(original);
         reflectX(params, modified, sm, cb);
         reflectY(params, modified, sm, cb);
         reflectZ(params, modified, sm, cb);
@@ -90,7 +91,7 @@ public class DuplicatePlugin implements IBlocksPlugin {
         return modified;
     }
 
-    private void reflectX(DuplicateParameters params, SparseMatrix<Block> grid, StarMade sm, IPluginCallback cb) {
+    private void reflectX(DuplicateParameters params, BlockSparseMatrix grid, StarMade sm, IPluginCallback cb) {
         if (params.getXReflect() == 0) {
             return;
         }
@@ -162,7 +163,7 @@ public class DuplicatePlugin implements IBlocksPlugin {
         cb.endTask();
     }
 
-    private void reflectY(DuplicateParameters params, SparseMatrix<Block> grid, StarMade sm, IPluginCallback cb) {
+    private void reflectY(DuplicateParameters params, BlockSparseMatrix grid, StarMade sm, IPluginCallback cb) {
         if (params.getYReflect() == 0) {
             return;
         }
@@ -236,7 +237,7 @@ public class DuplicatePlugin implements IBlocksPlugin {
         cb.endTask();
     }
 
-    private void reflectZ(DuplicateParameters params, SparseMatrix<Block> grid, StarMade sm, IPluginCallback cb) {
+    private void reflectZ(DuplicateParameters params, BlockSparseMatrix grid, StarMade sm, IPluginCallback cb) {
         if (params.getZReflect() == 0) {
             return;
         }

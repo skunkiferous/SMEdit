@@ -17,6 +17,7 @@
  **/
 package jo.sm.plugins.planet.select;
 
+import jo.sm.data.BlockSparseMatrix;
 import jo.sm.data.SparseMatrix;
 import jo.sm.data.StarMade;
 import jo.sm.logic.GridLogic;
@@ -64,7 +65,7 @@ public class SelectCopyToPlugin implements IBlocksPlugin {
     }
 
     @Override
-    public void initParameterBean(SparseMatrix<Block> original, Object p,
+    public void initParameterBean(BlockSparseMatrix original, Object p,
             StarMade sm, IPluginCallback cb) {
         SelectCopyToParameters params = (SelectCopyToParameters) p;
         if (sm.getCurrentModel() != null) {
@@ -78,13 +79,13 @@ public class SelectCopyToPlugin implements IBlocksPlugin {
     }
 
     @Override
-    public SparseMatrix<Block> modify(SparseMatrix<Block> original,
+    public BlockSparseMatrix modify(BlockSparseMatrix original,
             Object p, StarMade sm, IPluginCallback cb) {
         SelectCopyToParameters params = (SelectCopyToParameters) p;
         Point3i lower = new Point3i();
         Point3i upper = new Point3i();
         PluginUtils.getEffectiveSelection(sm, original, lower, upper);
-        SparseMatrix<Block> clip = GridLogic.extract(original, lower, upper);
+        BlockSparseMatrix clip = GridLogic.extract(original, lower, upper);
         ShapeLibraryLogic.addEntry(clip, params.getName(), params.getAuthor(), params.getType());
         return null;
     }

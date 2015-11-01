@@ -22,6 +22,7 @@ import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import jo.sm.data.BlockSparseMatrix;
 import jo.sm.data.BlockTypes;
 import jo.sm.data.SparseMatrix;
 import jo.sm.data.StarMade;
@@ -67,7 +68,7 @@ public class ImportBinvoxPlugin implements IBlocksPlugin {
     }
 
     @Override
-    public void initParameterBean(SparseMatrix<Block> original, Object params,
+    public void initParameterBean(BlockSparseMatrix original, Object params,
             StarMade sm, IPluginCallback cb) {
     }
 
@@ -77,7 +78,7 @@ public class ImportBinvoxPlugin implements IBlocksPlugin {
     }
 
     @Override
-    public SparseMatrix<Block> modify(SparseMatrix<Block> original,
+    public BlockSparseMatrix modify(BlockSparseMatrix original,
             Object p, StarMade sm, IPluginCallback cb) {
         ImportBinvoxParameters params;
         params = (ImportBinvoxParameters) p;
@@ -95,8 +96,8 @@ public class ImportBinvoxPlugin implements IBlocksPlugin {
                 return null;
             }
             cb.setStatus("Converting " + hull.getYSpan() + "x" + hull.getXSpan() + "x" + hull.getZSpan());
-            SparseMatrix<Block> modified;
-            modified = new SparseMatrix<>();
+            BlockSparseMatrix modified;
+            modified = new BlockSparseMatrix();
             mapHull(modified, hull, cb, color);
             cb.setStatus("Centering hull");
             Point3i lower;
@@ -123,7 +124,7 @@ public class ImportBinvoxPlugin implements IBlocksPlugin {
         }
     }
 
-    private void mapHull(SparseMatrix<Block> modified, BinvoxData hull, IPluginCallback cb, short color) throws IOException {
+    private void mapHull(BlockSparseMatrix modified, BinvoxData hull, IPluginCallback cb, short color) throws IOException {
         cb.startTask(hull.getZSpan());
 
         for (int x = 0; x < hull.getXSpan(); x++) {

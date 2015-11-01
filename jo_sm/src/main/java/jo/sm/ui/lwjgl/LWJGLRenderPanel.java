@@ -24,6 +24,7 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 
+import jo.sm.data.BlockSparseMatrix;
 import jo.sm.data.BlockTypes;
 import jo.sm.data.RenderPoly;
 import jo.sm.data.SparseMatrix;
@@ -51,7 +52,7 @@ public class LWJGLRenderPanel extends RenderPanel {
     private final JGLGroup mSelection;
     private final JGLGroup mAxis;
 
-    private SparseMatrix<Block> mFilteredGrid;
+    private BlockSparseMatrix mFilteredGrid;
     private boolean mPlainGraphics;
     private boolean mDontDraw;
     private UndoBuffer mUndoer;
@@ -116,7 +117,7 @@ public class LWJGLRenderPanel extends RenderPanel {
     @Override
     public void updateTiles() {
         if (mDontDraw) {
-            mFilteredGrid = new SparseMatrix<>();
+            mFilteredGrid = new BlockSparseMatrix();
         } else if (StarMadeLogic.getInstance().getViewFilter() == null) {
             mFilteredGrid = StarMadeLogic.getModel();
         } else {
@@ -265,7 +266,7 @@ public class LWJGLRenderPanel extends RenderPanel {
 
     @Override
     public void undo() {
-        SparseMatrix<Block> grid = mUndoer.undo();
+        BlockSparseMatrix grid = mUndoer.undo();
         if (grid != null) {
             StarMadeLogic.setModel(grid);
         }
@@ -273,7 +274,7 @@ public class LWJGLRenderPanel extends RenderPanel {
 
     @Override
     public void redo() {
-        SparseMatrix<Block> grid = mUndoer.redo();
+        BlockSparseMatrix grid = mUndoer.redo();
         if (grid != null) {
             StarMadeLogic.setModel(grid);
         }

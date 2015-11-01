@@ -28,6 +28,7 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import jo.sm.data.BlockSparseMatrix;
 import jo.sm.data.BlockTypes;
 import jo.sm.data.SparseMatrix;
 import jo.sm.logic.IOLogic;
@@ -98,7 +99,7 @@ public class LogicLogic {
         }
     }
 
-    public static Logic make(SparseMatrix<Block> grid) {
+    public static Logic make(BlockSparseMatrix grid) {
         Logic logic = new Logic();
         logic.setUnknown1(0);
         Point3i coreLocation = ShipLogic.findCore(grid);
@@ -145,7 +146,7 @@ public class LogicLogic {
         return logic;
     }
 
-    private static List<Point3i> findAllControllerBlocks(SparseMatrix<Block> grid) {
+    private static List<Point3i> findAllControllerBlocks(BlockSparseMatrix grid) {
         List<Point3i> blocks = new ArrayList<>();
         for (Iterator<Point3i> i = grid.iteratorNonNull(); i.hasNext();) {
             Point3i pp = i.next();
@@ -157,7 +158,7 @@ public class LogicLogic {
         return blocks;
     }
 
-    public static void dump(Logic logic, SparseMatrix<Block> grid) {
+    public static void dump(Logic logic, BlockSparseMatrix grid) {
         log.log(Level.INFO, "Logic, unknown=" + logic.getUnknown1() + ", #controllers=" + logic.getControllers().size());
         //System.out.println("Logic, unknown=" + logic.getUnknown1() + ", #controllers=" + logic.getControllers().size());
         for (ControllerEntry controller : logic.getControllers()) {

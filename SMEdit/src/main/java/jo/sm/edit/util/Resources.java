@@ -16,7 +16,7 @@
  * the License.
  */
 
-package jo.util;
+package jo.sm.edit.util;
 
 /**
  *
@@ -28,6 +28,6 @@ public class Resources {
     public static final String SPLASH = ROOT_IMG + "/splash.png";
     public static final String ICON = ROOT_IMG + "/icon.png";
     public static final String DOWNLOAD = ROOT_IMG + "/download.png";
-    public static final String SVERSION = ROOT + "/start_version.dat";
+    public static final String SVERSION = ROOT + "/" + Paths.SM_VERSION_FILE;
     
 }

@@ -19,6 +19,7 @@ package jo.sm.plugins.planet.gen;
 
 import java.util.Random;
 
+import jo.sm.data.BlockSparseMatrix;
 import jo.sm.data.SparseMatrix;
 import jo.sm.data.StarMade;
 import jo.sm.logic.PluginUtils;
@@ -60,7 +61,7 @@ public class GiantsCausewayPlugin implements IBlocksPlugin {
     }
 
     @Override
-    public void initParameterBean(SparseMatrix<Block> original, Object params,
+    public void initParameterBean(BlockSparseMatrix original, Object params,
             StarMade sm, IPluginCallback cb) {
     }
 
@@ -70,7 +71,7 @@ public class GiantsCausewayPlugin implements IBlocksPlugin {
     }
 
     @Override
-    public SparseMatrix<Block> modify(SparseMatrix<Block> original,
+    public BlockSparseMatrix modify(BlockSparseMatrix original,
             Object p, StarMade sm, IPluginCallback cb) {
         GiantsCausewayParameters params = (GiantsCausewayParameters) p;
         HexParams hParams = makeParams(params);
@@ -269,7 +270,7 @@ public class GiantsCausewayPlugin implements IBlocksPlugin {
 
     private HexParams makeParams(GiantsCausewayParameters params) {
         HexParams hparams = new HexParams();
-        hparams.grid = new SparseMatrix<Block>();
+        hparams.grid = new BlockSparseMatrix();
         hparams.hexWidth = 3 * params.getHexRadius() / 2;
         hparams.hexHeight = (int) (Math.sqrt(3) * params.getHexRadius());
         hparams.fieldWidth = params.getPlanetRadius() * 2 / hparams.hexWidth + 1;
@@ -283,7 +284,7 @@ public class GiantsCausewayPlugin implements IBlocksPlugin {
 
     class HexParams {
 
-        SparseMatrix<Block> grid;
+        BlockSparseMatrix grid;
         int hexWidth;
         int hexHeight;
         int fieldWidth;

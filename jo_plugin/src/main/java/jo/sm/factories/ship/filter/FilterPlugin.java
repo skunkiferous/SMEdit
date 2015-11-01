@@ -19,6 +19,7 @@ package jo.sm.factories.ship.filter;
 
 import java.util.Iterator;
 
+import jo.sm.data.BlockSparseMatrix;
 import jo.sm.data.SparseMatrix;
 import jo.sm.data.StarMade;
 import jo.sm.mods.IBlocksPlugin;
@@ -58,7 +59,7 @@ public class FilterPlugin implements IBlocksPlugin {
     }
 
     @Override
-    public void initParameterBean(SparseMatrix<Block> original, Object params,
+    public void initParameterBean(BlockSparseMatrix original, Object params,
             StarMade sm, IPluginCallback cb) {
     }
 
@@ -74,9 +75,9 @@ public class FilterPlugin implements IBlocksPlugin {
     }
 
     @Override
-    public SparseMatrix<Block> modify(SparseMatrix<Block> original,
+    public BlockSparseMatrix modify(BlockSparseMatrix original,
             Object params, StarMade sm, IPluginCallback cb) {
-        SparseMatrix<Block> modified = new SparseMatrix<>();
+        BlockSparseMatrix modified = new BlockSparseMatrix();
         for (Iterator<Point3i> i = original.iteratorNonNull(); i.hasNext();) {
             Point3i p = i.next();
             Block b = original.get(p);

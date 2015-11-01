@@ -18,6 +18,9 @@
 package jo.sm.data;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Iterator;
 import java.util.List;
 
 import jo.vecmath.Point3f;
@@ -39,20 +42,66 @@ public class RenderSet {
         mVisiblePolys = new ArrayList<>();
     }
 
-    public List<RenderPoly> getAllPolys() {
+    public void clearAllPolys() {
+        mAllPolys.clear();
+    }
+
+    public void clearVisiblePolys() {
+        mVisiblePolys.clear();
+    }
+
+    public int getAllPolysCount() {
+        return mAllPolys.size();
+    }
+
+    public int getVisiblePolysCount() {
+        return mVisiblePolys.size();
+    }
+
+    public Iterable<RenderPoly> getAllPolys() {
         return mAllPolys;
     }
 
-    public void setAllPolys(List<RenderPoly> polys) {
-        mAllPolys = polys;
-    }
-
-    public List<RenderPoly> getVisiblePolys() {
+    public Iterable<RenderPoly> getVisiblePolys() {
         return mVisiblePolys;
     }
 
-    public void setVisiblePolys(List<RenderPoly> visiblePolys) {
-        mVisiblePolys = visiblePolys;
+    public Iterable<RenderPoly> getVisiblePolysReversed() {
+    	return new Iterable<RenderPoly>() {
+			@Override
+			public Iterator<RenderPoly> iterator() {
+				return new Iterator<RenderPoly>() {
+					private int index = mVisiblePolys.size() - 1;
+					@Override
+					public boolean hasNext() {
+						return index >= 0;
+					}
+
+					@Override
+					public RenderPoly next() {
+						return mVisiblePolys.get(index--);
+					}
+					
+				};
+			}
+    		
+    	};
+    }
+
+    public void addAllPolys(RenderPoly p) {
+        mAllPolys.add(p);
+    }
+
+    public void addVisiblePolys(RenderPoly p) {
+        mVisiblePolys.add(p);
+    }
+
+    public void sortAllPolys(Comparator<RenderPoly> cmp) {
+    	Collections.sort(mAllPolys, cmp);
+    }
+
+    public void sortVisiblePolys(Comparator<RenderPoly> cmp) {
+    	Collections.sort(mVisiblePolys, cmp);
     }
 
     public Point3f getUnitX() {

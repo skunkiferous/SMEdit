@@ -21,6 +21,7 @@ import java.util.Iterator;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import jo.sm.data.BlockSparseMatrix;
 import jo.sm.data.BlockTypes;
 import jo.sm.data.SparseMatrix;
 import jo.sm.data.StarMade;
@@ -66,7 +67,7 @@ public class ScalePlugin implements IBlocksPlugin {
     }
 
     @Override
-    public void initParameterBean(SparseMatrix<Block> original, Object params,
+    public void initParameterBean(BlockSparseMatrix original, Object params,
             StarMade sm, IPluginCallback cb) {
     }
 
@@ -76,7 +77,7 @@ public class ScalePlugin implements IBlocksPlugin {
     }
 
     @Override
-    public SparseMatrix<Block> modify(SparseMatrix<Block> original,
+    public BlockSparseMatrix modify(BlockSparseMatrix original,
             Object p, StarMade sm, IPluginCallback cb) {
         ScaleParameters params;
         params = (ScaleParameters) p;
@@ -86,8 +87,8 @@ public class ScalePlugin implements IBlocksPlugin {
         Point3i core;
         core = findCore(original);
         log.log(Level.INFO, "  Core at ", core);
-        SparseMatrix<Block> modified;
-        modified = new SparseMatrix<>();
+        BlockSparseMatrix modified;
+        modified = new BlockSparseMatrix();
         Point3f size;
         size = new Point3f(1, 1, 1);
         size.x *= params.getXScale();
@@ -124,7 +125,7 @@ public class ScalePlugin implements IBlocksPlugin {
     }
 
     private void set(Point3f iPoint, int x, int y, int z,
-            SparseMatrix<Block> grid, Block b) {
+            BlockSparseMatrix grid, Block b) {
         x = (int) (iPoint.x + x + .5);
         y = (int) (iPoint.y + y + .5);
         z = (int) (iPoint.z + z + .5);
@@ -147,7 +148,7 @@ public class ScalePlugin implements IBlocksPlugin {
         return ori;
     }
 
-    private Point3i findCore(SparseMatrix<Block> grid) {
+    private Point3i findCore(BlockSparseMatrix grid) {
         for (Iterator<Point3i> i = grid.iteratorNonNull(); i.hasNext();) {
             Point3i xyz;
             xyz = i.next();

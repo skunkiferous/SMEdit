@@ -23,6 +23,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
+import jo.sm.data.BlockSparseMatrix;
 import jo.sm.data.BlockTypes;
 import jo.sm.data.BooleanMatrix3D;
 import jo.sm.data.CubeIterator;
@@ -68,7 +69,7 @@ public class DeckPlugin implements IBlocksPlugin {
     }
 
     @Override
-    public void initParameterBean(SparseMatrix<Block> original, Object params,
+    public void initParameterBean(BlockSparseMatrix original, Object params,
             StarMade sm, IPluginCallback cb) {
     }
 
@@ -78,12 +79,12 @@ public class DeckPlugin implements IBlocksPlugin {
     }
 
     @Override
-    public SparseMatrix<Block> modify(SparseMatrix<Block> original,
+    public BlockSparseMatrix modify(BlockSparseMatrix original,
             Object p, StarMade sm, IPluginCallback cb) {
         DeckParameters params;
         params = (DeckParameters) p;
-        SparseMatrix<Block> modified;
-        modified = new SparseMatrix<>(original);
+        BlockSparseMatrix modified;
+        modified = new BlockSparseMatrix(original);
         Point3i lower;
         lower = new Point3i();
         Point3i upper;
@@ -101,7 +102,7 @@ public class DeckPlugin implements IBlocksPlugin {
     }
 
     private void placeStairs(IPluginCallback cb, DeckParameters params,
-            SparseMatrix<Block> modified, Point3i lower, Point3i upper,
+            BlockSparseMatrix modified, Point3i lower, Point3i upper,
             List<Point3i> interior, Set<Integer> deckYs) {
         int sx;
         sx = params.getStairwellWidth();
@@ -149,7 +150,7 @@ public class DeckPlugin implements IBlocksPlugin {
         cb.endTask();
     }
 
-    private void placeStair(SparseMatrix<Block> grid, int baseX, int baseY,
+    private void placeStair(BlockSparseMatrix grid, int baseX, int baseY,
             int baseZ, List<Point3i> interior, short material, int sizeX, int sizeY,
             int sizeZ) {
         for (int y = 0; y < sizeY; y++) {
@@ -165,22 +166,22 @@ public class DeckPlugin implements IBlocksPlugin {
         }
     }
 
-    private void placeIfInterior(SparseMatrix<Block> grid, Point3i p,
+    private void placeIfInterior(BlockSparseMatrix grid, Point3i p,
             List<Point3i> interior, short material) {
         if (interior.contains(p)) {
             grid.set(p, new Block(material));
         }
     }
 
-    private void removeIfInterior(SparseMatrix<Block> grid, Point3i p,
+    private void removeIfInterior(BlockSparseMatrix grid, Point3i p,
             List<Point3i> interior) {
         if (interior.contains(p)) {
             grid.set(p, null);
         }
     }
 
-    private void findInterior(SparseMatrix<Block> original, StarMade sm,
-            IPluginCallback cb, SparseMatrix<Block> modified, Point3i lower,
+    private void findInterior(BlockSparseMatrix original, StarMade sm,
+            IPluginCallback cb, BlockSparseMatrix modified, Point3i lower,
             Point3i upper, List<Point3i> interior) {
         if ((sm.getSelectedLower() != null) && (sm.getSelectedUpper() != null)) {
             lower.set(sm.getSelectedLower());
@@ -201,7 +202,7 @@ public class DeckPlugin implements IBlocksPlugin {
     }
 
     private void placeDecks(IPluginCallback cb, DeckParameters params,
-            SparseMatrix<Block> modified, Point3i lower, Point3i upper,
+            BlockSparseMatrix modified, Point3i lower, Point3i upper,
             List<Point3i> interior, Set<Integer> ys) {
         int firstY;
         firstY = 8 - params.getSpace() / 2 - params.getThickness();
@@ -224,7 +225,7 @@ public class DeckPlugin implements IBlocksPlugin {
         cb.endTask();
     }
 
-    private void placeDeck(SparseMatrix<Block> grid, int y,
+    private void placeDeck(BlockSparseMatrix grid, int y,
             List<Point3i> interior, short material) {
         for (Point3i p : interior) {
             if (p.y == y) {
@@ -233,7 +234,7 @@ public class DeckPlugin implements IBlocksPlugin {
         }
     }
 
-    private void scopeInterior(SparseMatrix<Block> grid, List<Point3i> interior,
+    private void scopeInterior(BlockSparseMatrix grid, List<Point3i> interior,
             BooleanMatrix3D exterior, Point3i lower, Point3i upper,
             IPluginCallback cb) {
         cb.setStatus("Calculating interior");

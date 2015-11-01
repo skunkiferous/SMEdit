@@ -24,6 +24,7 @@ import java.util.List;
 import java.util.Random;
 import java.util.Set;
 
+import jo.sm.data.BlockSparseMatrix;
 import jo.sm.data.BlockTypes;
 import jo.sm.data.CubeIterator;
 import jo.sm.data.SparseMatrix;
@@ -79,7 +80,7 @@ public class HullPlugin implements IBlocksPlugin {
     }
 
     @Override
-    public void initParameterBean(SparseMatrix<Block> original, Object params,
+    public void initParameterBean(BlockSparseMatrix original, Object params,
             StarMade sm, IPluginCallback cb) {
     }
 
@@ -89,24 +90,24 @@ public class HullPlugin implements IBlocksPlugin {
     }
 
     @Override
-    public SparseMatrix<Block> modify(SparseMatrix<Block> original,
+    public BlockSparseMatrix modify(BlockSparseMatrix original,
             Object p, StarMade sm, IPluginCallback cb) {
         HullParameters params;
         params = (HullParameters) p;
         Point3i center;
         Point3i lower;
         Point3i upper;
-        SparseMatrix<Block> modified;
+        BlockSparseMatrix modified;
         if ((sm.getSelectedLower() == null) || (sm.getSelectedUpper() == null)) {
             center = new Point3i(params.getCenterX(), params.getCenterY(), params.getCenterZ());
             lower = new Point3i(center.x - params.getSizeX() / 2, center.y - params.getSizeY() / 2, center.z - params.getSizeZ() / 2);
             upper = new Point3i(center.x + params.getSizeX() / 2, center.y + params.getSizeY() / 2, center.z + params.getSizeZ() / 2);
-            modified = new SparseMatrix<>();
+            modified = new BlockSparseMatrix();
         } else {
             lower = sm.getSelectedLower();
             upper = sm.getSelectedUpper();
             center = Point3iLogic.interpolate(lower, upper, .5f);
-            modified = new SparseMatrix<>(original);
+            modified = new BlockSparseMatrix(original);
         }
         switch (params.getType()) {
             case HullParameters.OPEN_FRAME:
@@ -147,7 +148,7 @@ public class HullPlugin implements IBlocksPlugin {
         return modified;
     }
 
-    private void generateBox(SparseMatrix<Block> grid, Point3i center, Point3i lower, Point3i upper, IPluginCallback cb) {
+    private void generateBox(BlockSparseMatrix grid, Point3i center, Point3i lower, Point3i upper, IPluginCallback cb) {
         cb.setStatus("Filling Box");
         cb.startTask(PluginUtils.getVolume(lower, upper));
         for (Iterator<Point3i> i = new CubeIterator(lower, upper); i.hasNext();) {
@@ -158,7 +159,7 @@ public class HullPlugin implements IBlocksPlugin {
         cb.endTask();
     }
 
-    private void generateTorus(SparseMatrix<Block> grid, Point3i center, Point3i lower, Point3i upper, IPluginCallback cb) {
+    private void generateTorus(BlockSparseMatrix grid, Point3i center, Point3i lower, Point3i upper, IPluginCallback cb) {
         cb.setStatus("Filling torus");
         Point3f radius = new Point3f(upper.x - lower.x, upper.y - lower.y, upper.z - lower.z);
         radius.scale(.5f);
@@ -168,7 +169,7 @@ public class HullPlugin implements IBlocksPlugin {
         PlotLogic.mapHull(grid, torus, radius, new Point3i(), new Point3i(), cb);
     }
 
-    private void generateSphere(SparseMatrix<Block> grid, Point3i center, Point3i lower, Point3i upper, IPluginCallback cb, boolean hemi) {
+    private void generateSphere(BlockSparseMatrix grid, Point3i center, Point3i lower, Point3i upper, IPluginCallback cb, boolean hemi) {
         cb.setStatus("Filling sphere");
         Point3f radius = new Point3f(upper.x - lower.x, upper.y - lower.y, upper.z - lower.z);
         radius.scale(0.50f);
@@ -178,7 +179,7 @@ public class HullPlugin implements IBlocksPlugin {
         PlotLogic.mapHull(grid, sphere, radius, new Point3i(), new Point3i(), cb);
     }
 
-    private void generateCone(SparseMatrix<Block> grid, Point3i center, Point3i lower, Point3i upper, IPluginCallback cb) {
+    private void generateCone(BlockSparseMatrix grid, Point3i center, Point3i lower, Point3i upper, IPluginCallback cb) {
         cb.setStatus("Filling Cone");
         cb.startTask(upper.z - lower.z + 1);
         for (int z = lower.z; z <= upper.z; z++) {
@@ -190,7 +191,7 @@ public class HullPlugin implements IBlocksPlugin {
         cb.endTask();
     }
 
-    private void generateNeedle(SparseMatrix<Block> grid, Point3i center, Point3i lower, Point3i upper, IPluginCallback cb) {
+    private void generateNeedle(BlockSparseMatrix grid, Point3i center, Point3i lower, Point3i upper, IPluginCallback cb) {
         cb.setStatus("Filling Cone");
         cb.startTask(upper.z - lower.z + 1);
         int xMidRad;
@@ -213,7 +214,7 @@ public class HullPlugin implements IBlocksPlugin {
         cb.endTask();
     }
 
-    private void generateCylinder(SparseMatrix<Block> grid, Point3i center, Point3i lower, Point3i upper, IPluginCallback cb) {
+    private void generateCylinder(BlockSparseMatrix grid, Point3i center, Point3i lower, Point3i upper, IPluginCallback cb) {
         cb.setStatus("Filling Cylinder");
         cb.startTask(upper.z - lower.z + 1);
         int xRad;
@@ -227,7 +228,7 @@ public class HullPlugin implements IBlocksPlugin {
         cb.endTask();
     }
 
-    private void generateDisc(SparseMatrix<Block> grid, Point3i center, Point3i lower, Point3i upper, IPluginCallback cb) {
+    private void generateDisc(BlockSparseMatrix grid, Point3i center, Point3i lower, Point3i upper, IPluginCallback cb) {
         cb.setStatus("Filling Disk");
         cb.startTask(upper.y - lower.y + 1);
         int xRad;
@@ -241,12 +242,12 @@ public class HullPlugin implements IBlocksPlugin {
         cb.endTask();
         RotateParameters params = new RotateParameters();
         params.setXRotate(90);
-        SparseMatrix<Block> modified;
+        BlockSparseMatrix modified;
         modified = RotatePlugin.rotateAround(grid, params, center);
         grid.set(modified);
     }
 
-    private void generateIrregular(SparseMatrix<Block> grid, Point3i center, Point3i lower, Point3i upper, IPluginCallback cb) {
+    private void generateIrregular(BlockSparseMatrix grid, Point3i center, Point3i lower, Point3i upper, IPluginCallback cb) {
         Set<Point3i> done;
         done = new HashSet<>();
         List<Point3i> todo;
@@ -285,7 +286,7 @@ public class HullPlugin implements IBlocksPlugin {
         }
     }
 
-    private void generateOpenFrame(SparseMatrix<Block> grid, Point3i center, Point3i lower, Point3i upper, IPluginCallback cb) {
+    private void generateOpenFrame(BlockSparseMatrix grid, Point3i center, Point3i lower, Point3i upper, IPluginCallback cb) {
         Set<Point3i> done;
         done = new HashSet<>();
         List<Point3i> todo;
@@ -312,7 +313,7 @@ public class HullPlugin implements IBlocksPlugin {
         cb.endTask();
     }
 
-    private void addFrameLink(SparseMatrix<Block> grid, Set<Point3i> done, List<Point3i> todo, Point3i p, Point3i center, int dx, int dy, int dz) {
+    private void addFrameLink(BlockSparseMatrix grid, Set<Point3i> done, List<Point3i> todo, Point3i p, Point3i center, int dx, int dy, int dz) {
         add(done, todo, p, dx, dy, dz);
         Point3i next = new Point3i(p.x + dx, p.y + dy, p.z + dz);
         if (!done.contains(next)) {
@@ -361,7 +362,7 @@ public class HullPlugin implements IBlocksPlugin {
         }
     }
 
-    private void addFrame(SparseMatrix<Block> grid, Point3i p, Point3i center) {
+    private void addFrame(BlockSparseMatrix grid, Point3i p, Point3i center) {
         Point3i o;
         o = new Point3i(center.x + p.x * 12, center.y + p.y * 12, center.z + p.z * 12);
         for (int i = 0; i < 8; i++) {
@@ -380,7 +381,7 @@ public class HullPlugin implements IBlocksPlugin {
         }
     }
 
-    private void drawElipse(SparseMatrix<Block> grid, int xc, int yc, int zc, int xRad, int yRad) {
+    private void drawElipse(BlockSparseMatrix grid, int xc, int yc, int zc, int xRad, int yRad) {
         if (xRad == 0) {
             if (yRad == 0) {
                 addHull(grid, xc, yc, zc);
@@ -426,31 +427,31 @@ public class HullPlugin implements IBlocksPlugin {
         }
     }
 
-    private void drawXLine(SparseMatrix<Block> grid, int x1, int y, int z, int x2) {
+    private void drawXLine(BlockSparseMatrix grid, int x1, int y, int z, int x2) {
         for (int x = x1; x <= x2; x++) {
             addHull(grid, x, y, z);
         }
     }
 
-    private void drawYLine(SparseMatrix<Block> grid, int x, int y1, int z, int y2) {
+    private void drawYLine(BlockSparseMatrix grid, int x, int y1, int z, int y2) {
         for (int y = y1; y <= y2; y++) {
             addHull(grid, x, y, z);
         }
     }
 
-    private void addHull(SparseMatrix<Block> grid, Point3i p) {
+    private void addHull(BlockSparseMatrix grid, Point3i p) {
         addHull(grid, p.x, p.y, p.z);
     }
 
-    private void addHull(SparseMatrix<Block> grid, Point3i p, short type) {
+    private void addHull(BlockSparseMatrix grid, Point3i p, short type) {
         addHull(grid, p.x, p.y, p.z, type);
     }
 
-    private void addHull(SparseMatrix<Block> grid, int x, int y, int z) {
+    private void addHull(BlockSparseMatrix grid, int x, int y, int z) {
         addHull(grid, x, y, z, BlockTypes.HULL_COLOR_GREY_ID);
     }
 
-    private void addHull(SparseMatrix<Block> grid, int x, int y, int z, short type) {
+    private void addHull(BlockSparseMatrix grid, int x, int y, int z, short type) {
         Block b;
         b = new Block();
         b.setBlockID(type);

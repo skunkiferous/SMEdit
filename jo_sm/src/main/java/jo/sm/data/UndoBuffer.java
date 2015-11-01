@@ -36,7 +36,7 @@ public class UndoBuffer {
         mPointer = 0;
     }
 
-    public SparseMatrix<Block> undo() {
+    public BlockSparseMatrix undo() {
         if (mPointer > 0) {
             mPointer--;
             return GridLogic.fromBytes(mBuffer.get(mPointer));
@@ -45,7 +45,7 @@ public class UndoBuffer {
         }
     }
 
-    public SparseMatrix<Block> redo() {
+    public BlockSparseMatrix redo() {
         if (mPointer < mBuffer.size()) {
             return GridLogic.fromBytes(mBuffer.get(mPointer++));
         } else {
@@ -53,7 +53,7 @@ public class UndoBuffer {
         }
     }
 
-    public void checkpoint(SparseMatrix<Block> grid) {
+    public void checkpoint(BlockSparseMatrix grid) {
         if (grid.size() > 10000) {
             return;
         }

@@ -14,7 +14,7 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package jo.util;
+package jo.sm.edit.util;
 
 import java.awt.Window;
 import java.io.BufferedInputStream;
@@ -29,7 +29,9 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import javax.swing.UIManager;
-import jo.util.io.HttpClient;
+
+import jo.sm.edit.util.io.FileUtils;
+import jo.sm.edit.util.io.HttpClient;
 
 /**
  * @Auther Robert Barefoot for SMEdit - version 1.0
@@ -41,19 +43,13 @@ public class Update {
     private static UpdateGUI download = null;
     private static final byte[] buffer = new byte[1024];
 
-    private static int getLatestVersion() {
+    private static String getLatestVersion() {
         try {
             InputStream is = new URL(URLs.SVERSION).openConnection().getInputStream();
-
-            int off = 0;
-            byte[] b = new byte[2];
-            while ((off += is.read(b, off, 2 - off)) != 2) {
-            }
-
-            return ((0xFF & b[0]) << 8) + (0xFF & b[1]);
+            return FileUtils.readStreamAsString(is);
         } catch (final IOException e) {
             log.log(Level.INFO, "Failed to get version information! {0}", e.getMessage());
-            return -1;
+            return "";
         }
     }
     public int update = -1;
@@ -62,17 +58,33 @@ public class Update {
         this.parent = parent;
     }
 
+    private static String makeVersionComparable(String version) {
+    	String[] parts = (version == null) ? new String[] {""} : version.split("\\.");
+    	String result = "";
+    	for (int i = 0; i < parts.length; i++) {
+			String p = parts[i].toLowerCase();
+			while (p.length() < 8) {
+				p = "0" + p;
+			}
+			result += p;
+		}
+    	return result;
+    }
+    
     public void checkUpdate(final boolean checkup) {
-        if (getLatestVersion() > GlobalConfiguration.getVersion()) {
-            Update.log.info("New SMEdit_Classic App version available!");
+        if (makeVersionComparable(getLatestVersion()).compareTo(makeVersionComparable(GlobalConfiguration.getVersion())) > 0) {
+            Update.log.info("New "+GlobalConfiguration.NAME+" App version available!");
             update = JOptionPane.showConfirmDialog(parent,
-                    "A newer version of the SMEdit_Classic is available.\n\n"
+                    "A newer version of the "+GlobalConfiguration.NAME+" is available.\n\n"
                     + " Do you wish to update?\n\n"
                     + "\n\n"
                     + "Choosing not to update may result\n"
                     + "in problems running the client.",
                     "Update Avalable", JOptionPane.YES_NO_OPTION);
             if (update == 0) {
+                if (download == null) {
+                    download = new UpdateGUI();
+                }
                 for (final Map.Entry<String, File> item : Paths.getDownloadCaches().entrySet()) {
                     try {
                         HttpClient.download(new URL(item.getKey()), item.getValue());
@@ -114,7 +126,7 @@ public class Update {
         if (download == null) {
             download = new UpdateGUI();
         }
-        final String jarNew = GlobalConfiguration.NAME + "_1." + getLatestVersion() + ".jar";
+        final String jarNew = GlobalConfiguration.NAME + ".jar";
         download(URLs.DOWNSTART, jarNew);
         final Runtime run = Runtime.getRuntime();
         try {

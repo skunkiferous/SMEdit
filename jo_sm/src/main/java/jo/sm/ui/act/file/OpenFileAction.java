@@ -30,6 +30,7 @@ import java.util.zip.ZipInputStream;
 import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
+import jo.sm.data.BlockSparseMatrix;
 import jo.sm.data.SparseMatrix;
 import jo.sm.logic.StarMadeLogic;
 import jo.sm.logic.utils.DebugLogic;
@@ -135,7 +136,7 @@ public class OpenFileAction extends GenericAction {
                 is.close();
                 throw new IllegalArgumentException("Unsupported file type '" + smb2 + "'");
             }
-            SparseMatrix<Block> grid = ShipLogic.getBlocks(data);
+            BlockSparseMatrix grid = ShipLogic.getBlocks(data);
             ShipSpec spec = new ShipSpec();
             spec.setName(name);
             spec.setType(ShipSpec.FILE);

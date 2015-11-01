@@ -25,6 +25,7 @@ import java.io.OutputStream;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import jo.sm.data.BlockSparseMatrix;
 import jo.sm.data.BlockTypes;
 import jo.sm.data.SparseMatrix;
 import jo.sm.ent.data.Tag;
@@ -119,7 +120,7 @@ public class MetaLogic {
         TagUtils.dump(meta.getData(), "  ");
     }
 
-    public static Meta make(SparseMatrix<Block> grid) {
+    public static Meta make(BlockSparseMatrix grid) {
         Meta meta = new Meta();
         meta.setUnknown1(0);
         meta.setUnknown2((byte) 1);

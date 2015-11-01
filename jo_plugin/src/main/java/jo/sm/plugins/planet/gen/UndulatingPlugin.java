@@ -19,6 +19,7 @@ package jo.sm.plugins.planet.gen;
 
 import java.util.Random;
 
+import jo.sm.data.BlockSparseMatrix;
 import jo.sm.data.SparseMatrix;
 import jo.sm.data.StarMade;
 import jo.sm.logic.PluginUtils;
@@ -62,7 +63,7 @@ public class UndulatingPlugin implements IBlocksPlugin {
     }
 
     @Override
-    public void initParameterBean(SparseMatrix<Block> original, Object params,
+    public void initParameterBean(BlockSparseMatrix original, Object params,
             StarMade sm, IPluginCallback cb) {
     }
 
@@ -72,7 +73,7 @@ public class UndulatingPlugin implements IBlocksPlugin {
     }
 
     @Override
-    public SparseMatrix<Block> modify(SparseMatrix<Block> original,
+    public BlockSparseMatrix modify(BlockSparseMatrix original,
             Object p, StarMade sm, IPluginCallback cb) {
         UndulatingParameters params = (UndulatingParameters) p;
         HexParams hParams = makeParams(params);
@@ -233,7 +234,7 @@ public class UndulatingPlugin implements IBlocksPlugin {
 
     private HexParams makeParams(UndulatingParameters params) {
         HexParams hparams = new HexParams();
-        hparams.grid = new SparseMatrix<Block>();
+        hparams.grid = new BlockSparseMatrix();
         hparams.fieldWidth = params.getPlanetRadius() * 2 / GRID + 1;
         hparams.fieldHeight = params.getPlanetRadius() * 2 / GRID + 1;
         hparams.field = new int[hparams.fieldWidth][hparams.fieldHeight];
@@ -245,7 +246,7 @@ public class UndulatingPlugin implements IBlocksPlugin {
 
     class HexParams {
 
-        SparseMatrix<Block> grid;
+        BlockSparseMatrix grid;
         int fieldWidth;
         int fieldHeight;
         int[][] field;

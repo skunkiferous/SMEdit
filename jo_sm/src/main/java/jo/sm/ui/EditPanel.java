@@ -52,6 +52,7 @@ import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.border.TitledBorder;
 
+import jo.sm.data.BlockSparseMatrix;
 import jo.sm.data.BlockTypes;
 import jo.sm.data.CubeIterator;
 import jo.sm.data.RenderPoly;
@@ -278,7 +279,7 @@ public class EditPanel extends JPanel {
         if (StarMadeLogic.getInstance().getSelectedBlockType() < 0) {
             return;
         }
-        SparseMatrix<Block> grid = StarMadeLogic.getModel();
+        BlockSparseMatrix grid = StarMadeLogic.getModel();
         Iterator<Point3i> i;
         if ((StarMadeLogic.getInstance().getSelectedLower() != null) && (StarMadeLogic.getInstance().getSelectedUpper() != null)) {
             i = new CubeIterator(StarMadeLogic.getInstance().getSelectedLower(), StarMadeLogic.getInstance().getSelectedUpper());
@@ -288,7 +289,7 @@ public class EditPanel extends JPanel {
         colorByIterator(grid, i, false);
     }
 
-    private void colorByIterator(SparseMatrix<Block> grid, Iterator<Point3i> i, boolean symmetric) {
+    private void colorByIterator(BlockSparseMatrix grid, Iterator<Point3i> i, boolean symmetric) {
         List<Point3i> coords = new ArrayList<>();
         while (i.hasNext()) {
             coords.clear();
@@ -326,7 +327,7 @@ public class EditPanel extends JPanel {
         mRenderer.repaint();
     }
 
-    private void paintBlock(SparseMatrix<Block> grid, Point3i coords) {
+    private void paintBlock(BlockSparseMatrix grid, Point3i coords) {
         Block block = grid.get(coords);
         if (block == null) {
             return;
@@ -345,7 +346,7 @@ public class EditPanel extends JPanel {
         if (b == null) {
             return;
         }
-        SparseMatrix<Block> grid = StarMadeLogic.getModel();
+        BlockSparseMatrix grid = StarMadeLogic.getModel();
         Point3i p = b.getPosition();
         if (p == null) {
             return;

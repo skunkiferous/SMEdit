@@ -15,7 +15,7 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package jo.util;
+package jo.sm.edit.util;
 
 import java.awt.Image;
 import java.awt.Toolkit;
@@ -32,7 +32,7 @@ import java.net.URL;
 import java.net.URLDecoder;
 import java.util.ArrayList;
 
-import javax.imageio.ImageIO;
+import jo.sm.edit.util.io.FileUtils;
 
 
 /**
@@ -40,7 +40,6 @@ import javax.imageio.ImageIO;
  *
  * @author Robert Barefoot for SMEdit - version 1.0
  */
-@SuppressWarnings({"CallToPrintStackTrace", "null"})
 public class GlobalConfiguration {
 
 
@@ -145,20 +144,16 @@ public class GlobalConfiguration {
                 : new File(path).toURI().toURL();
     }
 
-    public static int getVersion() {
+    public static String getVersion() {
         try {
-            final InputStream is = isRUNNING_FROM_JAR() ? GlobalConfiguration.class.getClassLoader().getResourceAsStream(Resources.SVERSION) : new FileInputStream(Paths.SVERSION);
-
-            int off = 0;
-            final byte[] b = new byte[2];
-            while ((off += is.read(b, off, 2 - off)) != 2) {
-            }
-
-            return ((0xFF & b[0]) << 8) + (0xFF & b[1]);
+            final InputStream is = isRUNNING_FROM_JAR()
+            		? GlobalConfiguration.class.getClassLoader().getResourceAsStream(Resources.SVERSION)
+            				: new FileInputStream(new File(Paths.getHomeDirectory(), Paths.SM_VERSION_FILE));
+            return FileUtils.readStreamAsString(is);
         } catch (final IOException e) {
-            
+            // NOP
         }
-        return -1;
+        return "";
     }
 
     /**

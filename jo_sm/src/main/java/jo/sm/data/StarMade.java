@@ -47,7 +47,7 @@ public class StarMade extends PCSBean {
     private String mStatusMessage;
     private IBlocksPlugin mViewFilter;
     private ShipSpec mCurrentModel;
-    private SparseMatrix<Block> mModel;
+    private BlockSparseMatrix mModel;
 
     public StarMade() {
         mBlocksPlugins = new ArrayList<>();
@@ -163,11 +163,11 @@ public class StarMade extends PCSBean {
         firePropertyChange();
     }
 
-    public SparseMatrix<Block> getModel() {
+    public BlockSparseMatrix getModel() {
         return mModel;
     }
 
-    public void setModel(SparseMatrix<Block> model) {
+    public void setModel(BlockSparseMatrix model) {
         queuePropertyChange("model", mModel, model);
         mModel = model;
         firePropertyChange();

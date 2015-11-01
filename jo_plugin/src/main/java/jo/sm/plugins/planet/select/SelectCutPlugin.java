@@ -23,6 +23,7 @@ import java.awt.datatransfer.ClipboardOwner;
 import java.awt.datatransfer.StringSelection;
 import java.awt.datatransfer.Transferable;
 
+import jo.sm.data.BlockSparseMatrix;
 import jo.sm.data.SparseMatrix;
 import jo.sm.data.StarMade;
 import jo.sm.logic.GridLogic;
@@ -68,7 +69,7 @@ public class SelectCutPlugin implements IBlocksPlugin, ClipboardOwner {
     }
 
     @Override
-    public void initParameterBean(SparseMatrix<Block> original, Object params,
+    public void initParameterBean(BlockSparseMatrix original, Object params,
             StarMade sm, IPluginCallback cb) {
     }
 
@@ -78,12 +79,12 @@ public class SelectCutPlugin implements IBlocksPlugin, ClipboardOwner {
     }
 
     @Override
-    public SparseMatrix<Block> modify(SparseMatrix<Block> original,
+    public BlockSparseMatrix modify(BlockSparseMatrix original,
             Object p, StarMade sm, IPluginCallback cb) {
         Point3i lower = sm.getSelectedLower();
         Point3i upper = sm.getSelectedUpper();
         if ((lower != null) && (upper != null)) {
-            SparseMatrix<Block> clip = GridLogic.extract(original, lower, upper);
+            BlockSparseMatrix clip = GridLogic.extract(original, lower, upper);
             String xml = GridLogic.toString(clip);
             Toolkit.getDefaultToolkit().getSystemClipboard().setContents(new StringSelection(xml), this);
             GridLogic.delete(original, lower, upper);

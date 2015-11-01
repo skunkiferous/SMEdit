@@ -15,7 +15,7 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package jo.util.io;
+package jo.sm.edit.util.io;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -33,8 +33,9 @@ import java.util.Map.Entry;
 import java.util.TimeZone;
 import java.util.logging.Logger;
 import java.util.zip.GZIPInputStream;
-import jo.util.GlobalConfiguration;
-import jo.util.OperatingSystem;
+
+import jo.sm.edit.util.GlobalConfiguration;
+import jo.sm.edit.util.OperatingSystem;
 
 /**
  * @author Robert Barefoot for SMEdit - version 1.0

@@ -23,15 +23,21 @@ import java.nio.FloatBuffer;
 
 import javax.imageio.ImageIO;
 
+import org.w3c.dom.Document;
+
+import jo.sm.data.BlockSparseMatrix;
 import jo.sm.data.SparseMatrix;
 import jo.sm.data.StarMade;
+import jo.sm.factories.planet.veg.VegetationFactory;
 import jo.sm.logic.utils.FileUtils;
 import jo.sm.logic.utils.ResourceUtils;
+import jo.sm.logic.utils.XMLUtils;
 import jo.sm.mods.IBlocksPlugin;
 import jo.sm.mods.IPluginCallback;
 import jo.sm.ship.data.Block;
 import jo.sm.ui.BlockTypeColors;
 import jo.sm.ui.lwjgl.LWJGLRenderLogic;
+import jo.util.Paths;
 import jo.util.jgl.obj.JGLGroup;
 import jo.util.jgl.obj.tri.JGLObj;
 import jo.vecmath.Point3f;
@@ -74,7 +80,7 @@ public class ExportDAEPlugin implements IBlocksPlugin {
     }
 
     @Override
-    public void initParameterBean(SparseMatrix<Block> original, Object params,
+    public void initParameterBean(BlockSparseMatrix original, Object params,
             StarMade sm, IPluginCallback cb) {
     }
 
@@ -84,7 +90,7 @@ public class ExportDAEPlugin implements IBlocksPlugin {
     }
 
     @Override
-    public SparseMatrix<Block> modify(SparseMatrix<Block> original,
+    public BlockSparseMatrix modify(BlockSparseMatrix original,
             Object p, StarMade sm, IPluginCallback cb) {
         ExportDAEParameters params = (ExportDAEParameters) p;
         try {
@@ -114,9 +120,19 @@ public class ExportDAEPlugin implements IBlocksPlugin {
         ImageIO.write(BlockTypeColors.mAllTextures, "PNG", new File(pngFile));
     }
 
+    private String loadDefinitions() throws IOException {
+        File plugins = new File(Paths.getPluginsDirectory());
+        File template = new File(plugins, "Template.dae");
+        if (template.exists()) {
+            return FileUtils.readFileAsString(template.getPath());
+        } else {
+            return ResourceUtils.loadSystemResourceString("Template.dae", ExportDAEPlugin.class);
+        }
+    }
+
     private void writeFile(String objFile, JGLGroup quads) throws IOException {
         File pngFile = new File(objFile.substring(0, objFile.length() - 4) + ".png");
-        String template = ResourceUtils.loadSystemResourceString("Template.dae", ExportDAEPlugin.class);
+        String template = loadDefinitions();
 
         JGLObj obj = (JGLObj) quads.getChildren().get(0);
         int facePoints = (obj.getMode() == JGLObj.TRIANGLES) ? 3 : 4;

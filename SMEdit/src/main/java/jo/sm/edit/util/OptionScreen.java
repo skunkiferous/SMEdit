@@ -15,7 +15,7 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package jo.util;
+package jo.sm.edit.util;
 
 import java.awt.Color;
 import java.awt.Font;
@@ -90,7 +90,7 @@ public class OptionScreen extends JFrame {
 
         mArgs = args;
         setIconImage(GlobalConfiguration.getImage(Resources.ICON));
-        setTitle(GlobalConfiguration.NAME + " version 1.0" + ((float) GlobalConfiguration.getVersion() / 100));
+        setTitle(GlobalConfiguration.NAME + " version " + GlobalConfiguration.getVersion());
         setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
         setResizable(false);
 
@@ -282,7 +282,7 @@ public class OptionScreen extends JFrame {
 
         jLabel4.setFont(new Font("Tahoma", 0, 12)); // NOI18N
         jLabel4.setForeground(new Color(255, 0, 0));
-        jLabel4.setText("Be Sure to set the preload options before you begin using SMEdit Classic");
+        jLabel4.setText("Be Sure to set the preload options before you begin using "+GlobalConfiguration.NAME);
 
         jPanel3.setBorder(createTitledBorder("* Folder Settings *"));
 
@@ -296,13 +296,13 @@ public class OptionScreen extends JFrame {
         if (null != mProps.getProperty("texture", "")) {
             switch (mProps.getProperty("texture", "")) {
                 case "Default":
-                    jComboBox2.setSelectedIndex(1);
+                    jComboBox2.setSelectedIndex(0);
                     break;
                 case "Pixel":
-                    jComboBox2.setSelectedIndex(2);
+                    jComboBox2.setSelectedIndex(1);
                     break;
                 case "Realistic":
-                    jComboBox2.setSelectedIndex(3);
+                    jComboBox2.setSelectedIndex(2);
                     break;
             }
         }
@@ -341,9 +341,9 @@ public class OptionScreen extends JFrame {
         
         jPanel4.setBorder(javax.swing.BorderFactory.createTitledBorder("* Start Up Instructions *"));
 
-        jLabel7.setText("Be sure to apply any changes before starting the main SMEdit app.");
+        jLabel7.setText("Be sure to apply any changes before starting the main "+GlobalConfiguration.NAME+" app.");
 
-        jLabel8.setText("Pressing \"Cancel\" will close the starter app without starting SMEdit.");
+        jLabel8.setText("Pressing \"Cancel\" will close the starter app without starting "+GlobalConfiguration.NAME+".");
 
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
@@ -381,7 +381,7 @@ public class OptionScreen extends JFrame {
             }
         });
         
-        jButton3.setText("Start SMEdit");
+        jButton3.setText("Start "+GlobalConfiguration.NAME);
         jButton3.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {

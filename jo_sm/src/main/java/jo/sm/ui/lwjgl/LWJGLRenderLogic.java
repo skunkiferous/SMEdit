@@ -23,6 +23,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import jo.sm.data.BlockSparseMatrix;
 import jo.sm.data.RenderPoly;
 import jo.sm.data.SparseMatrix;
 import jo.sm.ship.data.Block;
@@ -40,7 +41,7 @@ public class LWJGLRenderLogic {
 
     private static int mTextureID = -1;
 
-    public static void addBlocks(JGLGroup group, SparseMatrix<Block> grid, boolean plain) {
+    public static void addBlocks(JGLGroup group, BlockSparseMatrix grid, boolean plain) {
         if (mTextureID < 0) {
             BlockTypeColors.loadBlockIcons();
             JGLTextureCache.register(1, BlockTypeColors.mAllTextures);
@@ -86,7 +87,7 @@ public class LWJGLRenderLogic {
      * @param grid
      * @param p
      */
-    public static void addBlock(MeshInfo group, SparseMatrix<Block> grid, Point3i p) {
+    public static void addBlock(MeshInfo group, BlockSparseMatrix grid, Point3i p) {
         Block b = grid.get(p);
         if (b == null) {
             return;

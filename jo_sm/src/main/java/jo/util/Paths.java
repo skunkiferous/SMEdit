@@ -36,7 +36,8 @@ public class Paths {
 
 
     public static final String ROOT = "." + File.separator + "resources";
-    public static final String VERSION = ROOT + File.separator + "version.dat";
+    public static final String SM_VERSION_FILE = "sm_version.txt";
+    public static final String VERSION = ROOT + File.separator + SM_VERSION_FILE;
     private static Map<String, File> downloadCache;
     /* file locations */
 

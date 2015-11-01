@@ -17,6 +17,7 @@
  **/
 package jo.sm.plugins.all.props;
 
+import jo.sm.data.BlockSparseMatrix;
 import jo.sm.data.SparseMatrix;
 import jo.sm.data.StarMade;
 import jo.sm.logic.StarMadeLogic;
@@ -57,7 +58,7 @@ public class PropsPlugin implements IBlocksPlugin {
     }
 
     @Override
-    public void initParameterBean(SparseMatrix<Block> original, Object params,
+    public void initParameterBean(BlockSparseMatrix original, Object params,
             StarMade sm, IPluginCallback cb) {
         PropsParameters p = (PropsParameters) params;
         p.setInvertXAxis(StarMadeLogic.isProperty(StarMadeLogic.INVERT_X_AXIS));
@@ -70,7 +71,7 @@ public class PropsPlugin implements IBlocksPlugin {
     }
 
     @Override
-    public SparseMatrix<Block> modify(SparseMatrix<Block> original,
+    public BlockSparseMatrix modify(BlockSparseMatrix original,
             Object p, StarMade sm, IPluginCallback cb) {
         PropsParameters params = (PropsParameters) p;
         StarMadeLogic.setProperty(StarMadeLogic.INVERT_X_AXIS, params.isInvertXAxis());

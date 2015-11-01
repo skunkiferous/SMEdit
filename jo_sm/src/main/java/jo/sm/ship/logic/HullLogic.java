@@ -23,6 +23,7 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
+import jo.sm.data.BlockSparseMatrix;
 import jo.sm.data.BlockTypes;
 import jo.sm.data.BooleanMatrix3D;
 import jo.sm.data.SparseMatrix;
@@ -35,7 +36,7 @@ import jo.vecmath.Point3i;
  **/
 public class HullLogic {
 
-    public static void power(SparseMatrix<Block> grid) {
+    public static void power(BlockSparseMatrix grid) {
         Map<Short, Short> filter = new HashMap<>();
         for (int color = 0; color < BlockTypes.HULL_COLOR_MAP[0].length; color++) {
             filter.put(BlockTypes.HULL_COLOR_MAP[BlockTypes.HULL_COLORS][color], BlockTypes.HULL_COLOR_MAP[BlockTypes.POWERHULL_COLORS][color]);
@@ -47,7 +48,7 @@ public class HullLogic {
         doFilter(grid, filter);
     }
 
-    public static void unpower(SparseMatrix<Block> grid) {
+    public static void unpower(BlockSparseMatrix grid) {
         Map<Short, Short> filter = new HashMap<>();
         for (int color = 0; color < BlockTypes.HULL_COLOR_MAP[0].length; color++) {
             filter.put(BlockTypes.HULL_COLOR_MAP[BlockTypes.POWERHULL_COLORS][color], BlockTypes.HULL_COLOR_MAP[BlockTypes.HULL_COLORS][color]);
@@ -59,7 +60,7 @@ public class HullLogic {
         doFilter(grid, filter);
     }
 
-    private static void doFilter(SparseMatrix<Block> grid, Map<Short, Short> filter) {
+    private static void doFilter(BlockSparseMatrix grid, Map<Short, Short> filter) {
         for (Iterator<Point3i> i = grid.iterator(); i.hasNext();) {
             Point3i coords = i.next();
             Block block = grid.get(coords);
@@ -77,7 +78,7 @@ public class HullLogic {
         }
     }
 
-    public static Set<Point3i> findExterior(SparseMatrix<Block> grid, IPluginCallback cb) {
+    public static Set<Point3i> findExterior(BlockSparseMatrix grid, IPluginCallback cb) {
         Point3i lower = new Point3i();
         Point3i upper = new Point3i();
         grid.getBounds(lower, upper);
@@ -174,7 +175,7 @@ public class HullLogic {
         return exterior;
     }
 
-    public static BooleanMatrix3D findExteriorMatrix(SparseMatrix<Block> grid, IPluginCallback cb) {
+    public static BooleanMatrix3D findExteriorMatrix(BlockSparseMatrix grid, IPluginCallback cb) {
         Point3i lower = new Point3i();
         Point3i upper = new Point3i();
         grid.getBounds(lower, upper);

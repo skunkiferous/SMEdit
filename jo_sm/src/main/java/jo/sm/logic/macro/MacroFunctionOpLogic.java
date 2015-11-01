@@ -28,6 +28,7 @@ import java.util.logging.Logger;
 import javax.script.Bindings;
 import javax.script.ScriptContext;
 
+import jo.sm.data.BlockSparseMatrix;
 import jo.sm.data.SparseMatrix;
 import jo.sm.data.StarMade;
 import jo.sm.logic.StarMadeLogic;
@@ -169,7 +170,7 @@ public class MacroFunctionOpLogic {
 
     static Object evaluateBlocksPlugin(IBlocksPlugin plugin, Map<String, Object> props, Object[] args) {
         @SuppressWarnings("unchecked")
-        SparseMatrix<Block> grid = (SparseMatrix<Block>) find(SparseMatrix.class, "grid", props, args);
+        BlockSparseMatrix grid = (BlockSparseMatrix) find(BlockSparseMatrix.class, "grid", props, args);
         if (grid == null) {
             throw new IllegalArgumentException("Cannot find grid argument");
         }
@@ -187,7 +188,7 @@ public class MacroFunctionOpLogic {
         }
         DescribedBeanInfo info = new DescribedBeanInfo(params);
         int off = 0;
-        if ((args.length > 0) && (args[0] instanceof SparseMatrix)) {
+        if ((args.length > 0) && (args[0] instanceof BlockSparseMatrix)) {
             off++;
         }
         for (int i = 0; i < info.getOrderedProps().size(); i++) {

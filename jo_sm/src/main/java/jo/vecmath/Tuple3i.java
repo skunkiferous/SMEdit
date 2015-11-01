@@ -595,4 +595,22 @@ public abstract class Tuple3i implements java.io.Serializable, Cloneable {
     public final void setZ(int z) {
         this.z = z;
     }
+    
+    public int slotsRequired() {
+    	return 3;
+    }
+    
+    public int export(int offset, int[] data) {
+    	data[offset++] = x;
+    	data[offset++] = y;
+    	data[offset++] = z;
+    	return offset;
+    }
+    
+    public int _import(int offset, int[] data) {
+    	x = data[offset++];
+    	y = data[offset++];
+    	z = data[offset++];
+    	return offset;
+    }
 }

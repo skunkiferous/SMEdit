@@ -30,7 +30,7 @@ import jo.vecmath.Point3s;
 /**
  * @Auther Jo Jaquinta for SMEdit Classic - version 1.0
  **/
-public final class SparseMatrix<T> {
+public class SparseMatrix<T> {
 
     public static long toHashCode(int x, int y, int z) {
         byte[] buffer = new byte[8];

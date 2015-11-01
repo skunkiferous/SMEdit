@@ -27,6 +27,7 @@ import java.util.List;
 
 import javax.imageio.ImageIO;
 
+import jo.sm.data.BlockSparseMatrix;
 import jo.sm.data.RenderTile;
 import jo.sm.data.SparseMatrix;
 import jo.sm.mods.IPluginCallback;
@@ -43,7 +44,7 @@ import jo.vecmath.logic.Matrix4fLogic;
  **/
 public class DraftImageLogic {
 
-    public static void saveDrafImages(File dir, String name, Dimension size, SparseMatrix<Block> grid,
+    public static void saveDrafImages(File dir, String name, Dimension size, BlockSparseMatrix grid,
             IPluginCallback cb) throws IOException {
         cb.setStatus("Exporting images");
         cb.startTask(8);
@@ -103,13 +104,13 @@ public class DraftImageLogic {
         cb.endTask();
     }
 
-    public static BufferedImage saveDraftImage(File f, Dimension size, SparseMatrix<Block> grid, float rotX, float rotY) throws IOException {
+    public static BufferedImage saveDraftImage(File f, Dimension size, BlockSparseMatrix grid, float rotX, float rotY) throws IOException {
         BufferedImage img = getDraftImage(grid, size, rotX, rotY);
         ImageIO.write(img, "PNG", f);
         return img;
     }
 
-    public static BufferedImage getDraftImage(SparseMatrix<Block> grid, Dimension size, float rotX, float rotY) {
+    public static BufferedImage getDraftImage(BlockSparseMatrix grid, Dimension size, float rotX, float rotY) {
         Matrix4f transform = new Matrix4f();
         Vector3f mPreTranslate = new Vector3f();
         float scale;

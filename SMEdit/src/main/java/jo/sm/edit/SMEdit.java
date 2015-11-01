@@ -17,6 +17,8 @@
  */
 package jo.sm.edit;
 
+import static jo.sm.edit.util.Paths.getDownloadCaches;
+
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
@@ -27,12 +29,14 @@ import java.net.URLClassLoader;
 import java.util.Map;
 import java.util.logging.Logger;
 import javax.swing.JFrame;
-import jo.util.GlobalConfiguration;
-import jo.util.OptionScreen;
-import jo.util.Paths;
-import static jo.util.Paths.getDownloadCaches;
-import jo.util.Update;
-import jo.util.io.HttpClient;
+import javax.swing.UIManager;
+
+import jo.sm.edit.util.GlobalConfiguration;
+import jo.sm.edit.util.OptionScreen;
+import jo.sm.edit.util.Paths;
+import jo.sm.edit.util.URLs;
+import jo.sm.edit.util.Update;
+import jo.sm.edit.util.io.HttpClient;
 
 /**
  * @Auther Jo Jaquinta for SMEdit Classic - version 1.0
@@ -40,18 +44,25 @@ import jo.util.io.HttpClient;
  */
 public class SMEdit extends JFrame {
 
-    private static File mOptionDir;
-    private static SMEdit app;
     private static final long serialVersionUID = 1L;
 
-    private static final Update updater = new Update(app);
-    private static final Logger log = Logger.getLogger(SMEdit.class.getName());
-
     public static void main(final String[] args) {
+        try {
+            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+//            for (LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
+//               if ("Nimbus".equals(info.getName())) {
+//                   UIManager.setLookAndFeel(info.getClassName());
+//                   break;
+//                }
+//            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }        
         GlobalConfiguration.createDirectories();
         if (!Paths.validateCurrentDirectory()) {
             return;
         }
+        final Update updater = new Update(null);
         updater.checkUpdate(true);
         if (updater.update == -1) {
             OptionScreen opts = new OptionScreen(args);
@@ -62,8 +73,7 @@ public class SMEdit extends JFrame {
 
     public SMEdit(final String[] args) {
         mArgs = args;
-        mOptionDir = new File(Paths.getHomeDirectory());
-        File jo_smJar = new File(mOptionDir, "jo_sm.jar");
+        File jo_smJar = Paths.getSmJarFile();
         if (!jo_smJar.exists()) {
             for (final Map.Entry<String, File> item : getDownloadCaches().entrySet()) {
                 try {

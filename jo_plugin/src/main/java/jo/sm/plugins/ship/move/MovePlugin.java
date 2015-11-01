@@ -23,6 +23,7 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import jo.sm.data.BlockSparseMatrix;
 import jo.sm.data.BlockTypes;
 import jo.sm.data.SparseMatrix;
 import jo.sm.data.StarMade;
@@ -42,10 +43,10 @@ public class MovePlugin implements IBlocksPlugin {
                 {TYPE_SHIP, SUBTYPE_MODIFY},};
     private static final Logger log = Logger.getLogger(MovePlugin.class.getName());
 
-    public static SparseMatrix<Block> shift(SparseMatrix<Block> original, int dx, int dy, int dz, IPluginCallback cb) {
+    public static BlockSparseMatrix shift(BlockSparseMatrix original, int dx, int dy, int dz, IPluginCallback cb) {
         cb.startTask(original.size());
-        SparseMatrix<Block> modified;
-        modified = new SparseMatrix<>();
+        BlockSparseMatrix modified;
+        modified = new BlockSparseMatrix();
         for (Iterator<Point3i> i = original.iteratorNonNull(); i.hasNext();) {
             cb.workTask(1);
             Point3i from;
@@ -66,7 +67,7 @@ public class MovePlugin implements IBlocksPlugin {
         return modified;
     }
 
-    private static short getFiller(SparseMatrix<Block> grid, Point3i p) {
+    private static short getFiller(BlockSparseMatrix grid, Point3i p) {
         Map<Short, Integer> votes = new HashMap<>();
         for (int dx = -1; dx <= 1; dx++) {
             for (int dy = -1; dy <= 1; dy++) {
@@ -98,7 +99,7 @@ public class MovePlugin implements IBlocksPlugin {
         return best;
     }
 
-    public static Point3i findCore(SparseMatrix<Block> grid) {
+    public static Point3i findCore(BlockSparseMatrix grid) {
         for (Iterator<Point3i> i = grid.iteratorNonNull(); i.hasNext();) {
             Point3i xyz = i.next();
             if (grid.get(xyz).getBlockID() == BlockTypes.CORE_ID) {
@@ -129,7 +130,7 @@ public class MovePlugin implements IBlocksPlugin {
     }
 
     @Override
-    public void initParameterBean(SparseMatrix<Block> original, Object params, StarMade sm, IPluginCallback cb) {
+    public void initParameterBean(BlockSparseMatrix original, Object params, StarMade sm, IPluginCallback cb) {
     }
 
     @Override
@@ -138,7 +139,7 @@ public class MovePlugin implements IBlocksPlugin {
     }
 
     @Override
-    public SparseMatrix<Block> modify(SparseMatrix<Block> original, Object p, StarMade sm, IPluginCallback cb) {
+    public BlockSparseMatrix modify(BlockSparseMatrix original, Object p, StarMade sm, IPluginCallback cb) {
         MoveParameters params;
         params = (MoveParameters) p;
         //System.out.println("Params: X="+params.getXRotate()
@@ -147,7 +148,7 @@ public class MovePlugin implements IBlocksPlugin {
         Point3i core;
         core = findCore(original);
         log.log(Level.WARNING, "Core at: ", core);
-        SparseMatrix<Block> modified = shift(original, params.getXMove(), params.getYMove(), params.getZMove(), cb);
+        BlockSparseMatrix modified = shift(original, params.getXMove(), params.getYMove(), params.getZMove(), cb);
         // copy core
         modified.set(core, original.get(core));
         return modified;

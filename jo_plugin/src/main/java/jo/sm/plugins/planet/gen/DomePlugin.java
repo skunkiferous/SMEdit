@@ -17,6 +17,7 @@
  **/
 package jo.sm.plugins.planet.gen;
 
+import jo.sm.data.BlockSparseMatrix;
 import jo.sm.data.SparseMatrix;
 import jo.sm.data.StarMade;
 import jo.sm.logic.PluginUtils;
@@ -58,7 +59,7 @@ public class DomePlugin implements IBlocksPlugin {
     }
 
     @Override
-    public void initParameterBean(SparseMatrix<Block> original, Object params,
+    public void initParameterBean(BlockSparseMatrix original, Object params,
             StarMade sm, IPluginCallback cb) {
     }
 
@@ -68,15 +69,15 @@ public class DomePlugin implements IBlocksPlugin {
     }
 
     @Override
-    public SparseMatrix<Block> modify(SparseMatrix<Block> original,
+    public BlockSparseMatrix modify(BlockSparseMatrix original,
             Object p, StarMade sm, IPluginCallback cb) {
         DomeParameters params = (DomeParameters) p;
-        SparseMatrix<Block> modified = new SparseMatrix<Block>();
+        BlockSparseMatrix modified = new BlockSparseMatrix();
         fillGrid(modified, params, cb);
         return modified;
     }
 
-    private void fillGrid(SparseMatrix<Block> grid, DomeParameters params, IPluginCallback cb) {
+    private void fillGrid(BlockSparseMatrix grid, DomeParameters params, IPluginCallback cb) {
         cb.setStatus("Filling in dome");
         cb.startTask(params.getPlanetRadius() * 2);
         for (int x = -params.getPlanetRadius(); x <= params.getPlanetRadius(); x++) {
@@ -88,7 +89,7 @@ public class DomePlugin implements IBlocksPlugin {
         cb.endTask();
     }
 
-    private void fillColumn(int x, int y, SparseMatrix<Block> grid, DomeParameters params) {
+    private void fillColumn(int x, int y, BlockSparseMatrix grid, DomeParameters params) {
         double r = Math.sqrt(x * x + y * y);
         if (r > params.getPlanetRadius()) {
             return; // out of radius        

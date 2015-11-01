@@ -22,6 +22,8 @@ import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+
+import jo.sm.data.BlockSparseMatrix;
 import jo.sm.data.SparseMatrix;
 import jo.sm.logic.DraftImageLogic;
 import jo.sm.logic.RunnableLogic;
@@ -54,7 +56,7 @@ public class Shot extends Base {
         
         private void doSaveFile() {
         final ShipSpec spec = StarMadeLogic.getInstance().getCurrentModel();
-        final SparseMatrix<Block> original = StarMadeLogic.getModel();
+        final BlockSparseMatrix original = StarMadeLogic.getModel();
         final String name = dateFormat.format(new Date());
         final File dir = new File(Paths.getScreenshotsDirectory());
         if (!dir.isDirectory()) {

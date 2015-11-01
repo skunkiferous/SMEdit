@@ -51,11 +51,13 @@ public class RenderPoly {
     public static final int TRI4 = 4;
     public static final int RECTANGLE = 5;
 
-    private int mType;
-    private int mNormal;
-    private Block mBlock;
-    private Point3i mPosition;
-    private Point3i[] mModelPoints;
+    private static final Point3i[] EMPTY = new Point3i[0];
+    
+    private int mType;				// int[0]
+    private int mNormal;			// int[1]
+    private Block mBlock;			// int[2]
+    private Point3i mPosition;		// int[3-5]
+    private Point3i[] mModelPoints = EMPTY; // int[6-?]
 
     public Block getBlock() {
         return mBlock;
@@ -78,7 +80,7 @@ public class RenderPoly {
     }
 
     public void setModelPoints(Point3i[] modelPoints) {
-        mModelPoints = modelPoints;
+        mModelPoints = (modelPoints == null) ? EMPTY : modelPoints;
     }
 
     public int getNormal() {
@@ -95,5 +97,50 @@ public class RenderPoly {
 
     public void setPosition(Point3i position) {
         mPosition = position;
+    }
+    
+    public int slotsRequired() {
+    	return 7 + mModelPoints.length*3;
+    }
+    
+    public int export(int offset, int[] data) {
+    	data[offset++] = mType;
+    	data[offset++] = mNormal;
+    	data[offset++] = mBlock.toInt();
+    	offset = mPosition.export(offset, data);
+    	data[offset++] = mModelPoints.length;
+    	for (Point3i p : mModelPoints) {
+        	offset = p.export(offset, data);
+    	}
+    	return offset;
+    }
+    
+    public int _import(int offset, int[] data) {
+    	mType = data[offset++];
+    	mNormal = data[offset++];
+    	if (mBlock == null) {
+    		mBlock = new Block();
+    	}
+    	mBlock.fromInt(data[offset++]);
+    	if (mPosition == null) {
+    		mPosition = new Point3i();
+    	}
+    	offset = mPosition._import(offset, data);
+    	final int count = data[offset++];
+    	if (count != mModelPoints.length) {
+    		final int min = (count < mModelPoints.length) ? count : mModelPoints.length;
+    		final Point3i[] old = mModelPoints;
+    		mModelPoints = new Point3i[count];
+    		for (int i = 0; i < min; i++) {
+    			mModelPoints[i] = old[i];
+			}
+    		for (int i = min; i < count; i++) {
+    			mModelPoints[i] = new Point3i();
+			}
+    	}
+    	for (Point3i p : mModelPoints) {
+        	offset = p._import(offset, data);
+    	}
+    	return offset;
     }
 }

@@ -22,6 +22,7 @@ import java.io.IOException;
 
 import javax.swing.tree.DefaultMutableTreeNode;
 
+import jo.sm.data.BlockSparseMatrix;
 import jo.sm.data.Entity;
 import jo.sm.data.SparseMatrix;
 import jo.sm.logic.BlueprintLogic;
@@ -137,11 +138,11 @@ public class ShipTreeLogic {
         }
     }
 
-    public static SparseMatrix<Block> loadShip(ShipSpec spec, IPluginCallback cb) {
+    public static BlockSparseMatrix loadShip(ShipSpec spec, IPluginCallback cb) {
         try {
             if (spec.getType() == ShipSpec.BLUEPRINT) {
                 Blueprint blueprint = BlueprintLogic.readBlueprint(spec.getName(), cb);
-                SparseMatrix<Block> grid = ShipLogic.getBlocks(blueprint.getData());
+                BlockSparseMatrix grid = ShipLogic.getBlocks(blueprint.getData());
                 //System.out.println("Original:");
                 //HeaderLogic.dump(blueprint.getHeader());
                 //LogicLogic.dump(blueprint.getLogic(), grid);
@@ -151,7 +152,7 @@ public class ShipTreeLogic {
                 return grid;
             } else if (spec.getType() == ShipSpec.DEFAULT_BLUEPRINT) {
                 Blueprint blueprint = BlueprintLogic.readDefaultBlueprint(spec.getName(), cb);
-                SparseMatrix<Block> grid = ShipLogic.getBlocks(blueprint.getData());
+                BlockSparseMatrix grid = ShipLogic.getBlocks(blueprint.getData());
                 //System.out.println("Original:");
                 //HeaderLogic.dump(blueprint.getHeader());
                 //LogicLogic.dump(blueprint.getLogic(), grid);
@@ -163,7 +164,7 @@ public class ShipTreeLogic {
                 Entity e = spec.getEntity();
                 EntityLogic.readEntityData(e, cb);
                 //ShipLogic.dumpChunks(e.getData());
-                SparseMatrix<Block> grid = ShipLogic.getBlocks(e.getData());
+                BlockSparseMatrix grid = ShipLogic.getBlocks(e.getData());
                 e.setData(null); // conserve memory
                 return grid;
             } else {

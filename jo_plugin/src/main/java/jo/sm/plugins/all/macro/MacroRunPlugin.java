@@ -21,6 +21,7 @@ import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
+import jo.sm.data.BlockSparseMatrix;
 import jo.sm.data.SparseMatrix;
 import jo.sm.data.StarMade;
 import jo.sm.logic.macro.MacroLogic;
@@ -61,7 +62,7 @@ public class MacroRunPlugin implements IBlocksPlugin {
     }
 
     @Override
-    public void initParameterBean(SparseMatrix<Block> original, Object params,
+    public void initParameterBean(BlockSparseMatrix original, Object params,
             StarMade sm, IPluginCallback cb) {
     }
 
@@ -71,14 +72,14 @@ public class MacroRunPlugin implements IBlocksPlugin {
     }
 
     @Override
-    public SparseMatrix<Block> modify(SparseMatrix<Block> original,
+    public BlockSparseMatrix modify(BlockSparseMatrix original,
             Object p, StarMade sm, IPluginCallback cb) {
         MacroRunParameters params = (MacroRunParameters) p;
         return run(original, params, sm, cb);
     }
 
     @SuppressWarnings("unchecked")
-    public static SparseMatrix<Block> run(SparseMatrix<Block> original,
+    public static BlockSparseMatrix run(BlockSparseMatrix original,
             MacroRunParameters params, StarMade sm, IPluginCallback cb) {
         try {
             Map<String, Object> props = new HashMap<>();
@@ -86,8 +87,8 @@ public class MacroRunPlugin implements IBlocksPlugin {
             props.put("sm", sm);
             props.put("cb", cb);
             Object ret = MacroLogic.eval(new File(params.getFile()), props);
-            if (ret instanceof SparseMatrix) {
-                return (SparseMatrix<Block>) ret;
+            if (ret instanceof BlockSparseMatrix) {
+                return (BlockSparseMatrix) ret;
             }
             return null;
         } catch (Exception e) {

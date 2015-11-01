@@ -28,6 +28,7 @@ import javax.swing.JOptionPane;
 import static javax.swing.JOptionPane.showConfirmDialog;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
+import jo.sm.data.BlockSparseMatrix;
 import jo.sm.data.SparseMatrix;
 import jo.sm.logic.RunnableLogic;
 import jo.sm.logic.StarMadeLogic;
@@ -104,7 +105,7 @@ public class SaveAsFileAction extends GenericAction {
         spec.setType(ShipSpec.FILE);
         spec.setName(name);
         spec.setFile(smb2);
-        SparseMatrix<Block> grid = StarMadeLogic.getModel();
+        BlockSparseMatrix grid = StarMadeLogic.getModel();
         Map<Point3i, Data> data = ShipLogic.getData(grid);
         final Point3i p = new Point3i();
         final Data d = data.get(p);

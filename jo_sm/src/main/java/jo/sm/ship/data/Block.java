@@ -73,4 +73,38 @@ public final class Block {
     public void setOrientation(short orientation) {
         mOrientation = (byte) orientation;
     }
+    
+    public int toInt() {
+    	return (mBlockID & 0xFFFF) | ((mOrientation & 0xFF) << 16);
+    }
+    
+    public void fromInt(int data) {
+    	mBlockID = (short) (data & 0xFFFF); 
+    	mOrientation = (byte) ((data >> 16) & 0xFF); 
+    }
+    
+    public static void main(String[] args) {
+    	final Block src = new Block();
+    	final Block dst = new Block();
+    	
+    	src.setBlockID((short) 1234);
+    	src.setOrientation((short) 66);
+    	dst.fromInt(src.toInt());
+    	if (dst.getBlockID() != 1234) {
+    		throw new IllegalStateException(String.valueOf(dst.getBlockID()));
+    	}
+    	if (dst.getOrientation() != 66) {
+    		throw new IllegalStateException(String.valueOf(dst.getOrientation()));
+    	}
+    	
+    	src.setBlockID((short) 23456);
+    	src.setOrientation((short) 234);
+    	dst.fromInt(src.toInt());
+    	if (dst.getBlockID() != 23456) {
+    		throw new IllegalStateException(String.valueOf(dst.getBlockID()));
+    	}
+    	if ((dst.getOrientation() & 0xFF) != 234) {
+    		throw new IllegalStateException(String.valueOf(dst.getOrientation()));
+    	}
+    }
 }

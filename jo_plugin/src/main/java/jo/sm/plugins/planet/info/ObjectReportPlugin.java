@@ -28,6 +28,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import jo.sm.data.BlockSparseMatrix;
 import jo.sm.data.BlockTypes;
 import jo.sm.data.SparseMatrix;
 import jo.sm.data.StarMade;
@@ -74,7 +75,7 @@ public class ObjectReportPlugin implements IBlocksPlugin {
     }
 
     @Override
-    public void initParameterBean(SparseMatrix<Block> original, Object params,
+    public void initParameterBean(BlockSparseMatrix original, Object params,
             StarMade sm, IPluginCallback cb) {
     }
 
@@ -84,7 +85,7 @@ public class ObjectReportPlugin implements IBlocksPlugin {
     }
 
     @Override
-    public SparseMatrix<Block> modify(SparseMatrix<Block> original,
+    public BlockSparseMatrix modify(BlockSparseMatrix original,
             Object p, StarMade sm, IPluginCallback cb) {
         try {
             File repFile;
@@ -101,7 +102,7 @@ public class ObjectReportPlugin implements IBlocksPlugin {
         return null;
     }
 
-    private void reportBasics(PrintWriter wtr, SparseMatrix<Block> grid) {
+    private void reportBasics(PrintWriter wtr, BlockSparseMatrix grid) {
         Point3i lower;
         lower = new Point3i();
         Point3i upper;

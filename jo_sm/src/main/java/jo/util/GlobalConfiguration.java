@@ -43,13 +43,13 @@ import javax.imageio.ImageIO;
 import jo.log.LogFormatter;
 import jo.log.SystemConsoleHandler;
 import jo.log.TextAreaLogHandler;
+import jo.sm.logic.utils.StreamUtils;
 
 /**
  * Handles the configuration of the main app layout and logic start up
  *
  * @author Robert Barefoot - version 1.0
  */
-@SuppressWarnings({"CallToPrintStackTrace", "null"})
 public class GlobalConfiguration {
 
 
@@ -156,23 +156,16 @@ public class GlobalConfiguration {
                 : new File(path).toURI().toURL();
     }
 
-    public static int getVersion() {
+    public static String getVersion() {
         try {
-            final InputStream is = isRUNNING_FROM_JAR() ? GlobalConfiguration.class
-                    .getClassLoader().getResourceAsStream(
-                            Resources.VERSION) : new FileInputStream(
-                            Paths.VERSION);
-
-            int off = 0;
-            final byte[] b = new byte[2];
-            while ((off += is.read(b, off, 2 - off)) != 2) {
-            }
-
-            return ((0xFF & b[0]) << 8) + (0xFF & b[1]);
+            final InputStream is = isRUNNING_FROM_JAR()
+            		? GlobalConfiguration.class.getClassLoader().getResourceAsStream(Resources.VERSION)
+            				: new FileInputStream(new File(Paths.getHomeDirectory(), Paths.VERSION));
+            return StreamUtils.readStreamAsString(is);
         } catch (final IOException e) {
-            e.printStackTrace();
+            // NOP
         }
-        return -1;
+        return "";
     }
 
     public static void registerLogging() {

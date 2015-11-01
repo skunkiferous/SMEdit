@@ -30,6 +30,7 @@ import java.awt.geom.Path2D;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
+import jo.sm.data.BlockSparseMatrix;
 import jo.sm.data.BlockTypes;
 import jo.sm.data.RenderPoly;
 import jo.sm.data.RenderSet;
@@ -62,7 +63,7 @@ public class AWTRenderPanel extends RenderPanel {
     private boolean mDontDraw;
     private UndoBuffer mUndoer;
 
-    private SparseMatrix<Block> mFilteredGrid;
+    private BlockSparseMatrix mFilteredGrid;
     private final RenderSet mTiles;
     private final Matrix4f mTransform;
     private final Vector3f mPreTranslate;
@@ -257,7 +258,7 @@ public class AWTRenderPanel extends RenderPanel {
     @Override
     public void updateTiles() {
         if (mDontDraw) {
-            mFilteredGrid = new SparseMatrix<>();
+            mFilteredGrid = new BlockSparseMatrix();
         } else {
             if (StarMadeLogic.getInstance().getViewFilter() == null) {
                 mFilteredGrid = StarMadeLogic.getModel();
@@ -361,13 +362,12 @@ public class AWTRenderPanel extends RenderPanel {
         tile.setNormal(face);
         tile.setType(RenderPoly.SQUARE);
         tile.setBlock(new Block(type));
-        mTiles.getAllPolys().add(tile);
+        mTiles.addAllPolys(tile);
     }
 
     @Override
     public RenderPoly getTileAt(double x, double y) {
-        for (int i = mTiles.getVisiblePolys().size() - 1; i >= 0; i--) {
-            RenderPoly tile = mTiles.getVisiblePolys().get(i);
+        for (RenderPoly tile : mTiles.getVisiblePolysReversed()) {
             Point3f[] corners = RenderPolyLogic.getCorners(tile, mTiles);
             Path2D p = new Path2D.Float();
             p.moveTo(corners[0].x, corners[0].y);
@@ -425,7 +425,7 @@ public class AWTRenderPanel extends RenderPanel {
 
     @Override
     public void undo() {
-        SparseMatrix<Block> grid = mUndoer.undo();
+        BlockSparseMatrix grid = mUndoer.undo();
         if (grid != null) {
             StarMadeLogic.setModel(grid);
         }
@@ -433,7 +433,7 @@ public class AWTRenderPanel extends RenderPanel {
 
     @Override
     public void redo() {
-        SparseMatrix<Block> grid = mUndoer.redo();
+        BlockSparseMatrix grid = mUndoer.redo();
         if (grid != null) {
             StarMadeLogic.setModel(grid);
         }

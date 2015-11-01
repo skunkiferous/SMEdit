@@ -29,6 +29,7 @@ import java.util.logging.Logger;
 
 import javax.swing.ImageIcon;
 
+import jo.sm.data.BlockSparseMatrix;
 import jo.sm.data.BlockTypes;
 import jo.sm.data.RenderPoly;
 import jo.sm.data.RenderSet;
@@ -45,17 +46,17 @@ import jo.vecmath.logic.Point3iLogic;
 public class RenderPolyLogic {
     private static final Logger log = Logger.getLogger(RenderPolyLogic.class.getName());
 
-    public static void fillPolys(SparseMatrix<Block> blocks, RenderSet set) {
-        set.getAllPolys().clear();
+    public static void fillPolys(BlockSparseMatrix blocks, RenderSet set) {
+        set.clearAllPolys();
         Point3i lower = new Point3i();
         Point3i upper = new Point3i();
         blocks.getBounds(lower, upper);
-        getBasicPolys(blocks, upper, lower, set.getAllPolys());
+        getBasicPolys(blocks, upper, lower, set);
         //log.log(Level.INFO, "FillPolys: count="+set.getAllPolys().size());
     }
 
-    private static void getBasicPolys(SparseMatrix<Block> blocks,
-            Point3i upper, Point3i lower, List<RenderPoly> polys) {
+    private static void getBasicPolys(BlockSparseMatrix blocks,
+            Point3i upper, Point3i lower, RenderSet set) {
         /*
          for (int z = lower.z; z <= upper.z; z++)
          {
@@ -86,210 +87,210 @@ public class RenderPolyLogic {
             Block b = blocks.get(p);
             short blockID = b.getBlockID();
             if (BlockTypes.isCorner(blockID) || BlockTypes.isPowerCorner(blockID)) {
-                doCorner(blocks, p, polys);
+                doCorner(blocks, p, set);
             } else if (BlockTypes.isWedge(blockID) || BlockTypes.isPowerWedge(blockID)) {
-                doWedge(blocks, p, polys);
+                doWedge(blocks, p, set);
             } else if (BlockTypes.isPenta(blockID) || BlockTypes.isPowerPenta(blockID)) {
-                doPenta(blocks, p, polys);
+                doPenta(blocks, p, set);
             } else if (BlockTypes.isTetra(blockID) || BlockTypes.isPowerTetra(blockID)) {
-                doTetra(blocks, p, polys);
+                doTetra(blocks, p, set);
             } else {
-                doCube(blocks, p, polys);
+                doCube(blocks, p, set);
             }
         }
     }
 
-    private static void doPenta(SparseMatrix<Block> blocks, Point3i p, List<RenderPoly> polys) {
-        doXPSquare(blocks, p, polys, RenderPoly.SQUARE);
-        doXMSquare(blocks, p, polys, RenderPoly.SQUARE);
-        doYPSquare(blocks, p, polys, RenderPoly.SQUARE);
-        doYMSquare(blocks, p, polys, RenderPoly.SQUARE);
-        doZPSquare(blocks, p, polys, RenderPoly.SQUARE);
-        doZMSquare(blocks, p, polys, RenderPoly.SQUARE);
+    private static void doPenta(BlockSparseMatrix blocks, Point3i p, RenderSet set) {
+        doXPSquare(blocks, p, set, RenderPoly.SQUARE);
+        doXMSquare(blocks, p, set, RenderPoly.SQUARE);
+        doYPSquare(blocks, p, set, RenderPoly.SQUARE);
+        doYMSquare(blocks, p, set, RenderPoly.SQUARE);
+        doZPSquare(blocks, p, set, RenderPoly.SQUARE);
+        doZMSquare(blocks, p, set, RenderPoly.SQUARE);
     }
 
-    private static void doTetra(SparseMatrix<Block> blocks, Point3i p, List<RenderPoly> polys) {
-        doXPSquare(blocks, p, polys, RenderPoly.SQUARE);
-        doXMSquare(blocks, p, polys, RenderPoly.SQUARE);
-        doYPSquare(blocks, p, polys, RenderPoly.SQUARE);
-        doYMSquare(blocks, p, polys, RenderPoly.SQUARE);
-        doZPSquare(blocks, p, polys, RenderPoly.SQUARE);
-        doZMSquare(blocks, p, polys, RenderPoly.SQUARE);
+    private static void doTetra(BlockSparseMatrix blocks, Point3i p, RenderSet set) {
+        doXPSquare(blocks, p, set, RenderPoly.SQUARE);
+        doXMSquare(blocks, p, set, RenderPoly.SQUARE);
+        doYPSquare(blocks, p, set, RenderPoly.SQUARE);
+        doYMSquare(blocks, p, set, RenderPoly.SQUARE);
+        doZPSquare(blocks, p, set, RenderPoly.SQUARE);
+        doZMSquare(blocks, p, set, RenderPoly.SQUARE);
     }
 
-    private static void doCorner(SparseMatrix<Block> blocks, Point3i p, List<RenderPoly> polys) {
+    private static void doCorner(BlockSparseMatrix blocks, Point3i p, RenderSet set) {
         //System.out.println("Corner, ori="+blocks.get(p).getOrientation());
         switch (blocks.get(p).getOrientation()) {
             case 0: // spire: xp,zm>yp
-                doYMSquare(blocks, p, polys, RenderPoly.SQUARE); // bottom
-                doXMSquare(blocks, p, polys, RenderPoly.TRI4); // back
-                doZPSquare(blocks, p, polys, RenderPoly.TRI1); // back
-                doRect(blocks, p, polys, RenderPoly.XPYP, RenderPoly.TRI2);
-                doRect(blocks, p, polys, RenderPoly.YPZM, RenderPoly.TRI1);
+                doYMSquare(blocks, p, set, RenderPoly.SQUARE); // bottom
+                doXMSquare(blocks, p, set, RenderPoly.TRI4); // back
+                doZPSquare(blocks, p, set, RenderPoly.TRI1); // back
+                doRect(blocks, p, set, RenderPoly.XPYP, RenderPoly.TRI2);
+                doRect(blocks, p, set, RenderPoly.YPZM, RenderPoly.TRI1);
                 break;
             case 1: // spire: xp,zp>yp
-                doYMSquare(blocks, p, polys, RenderPoly.SQUARE); // bottom
-                doXMSquare(blocks, p, polys, RenderPoly.TRI1); // back
-                doZMSquare(blocks, p, polys, RenderPoly.TRI1); // back
-                doRect(blocks, p, polys, RenderPoly.XPYP, RenderPoly.TRI1);
-                doRect(blocks, p, polys, RenderPoly.YPZP, RenderPoly.TRI4);
+                doYMSquare(blocks, p, set, RenderPoly.SQUARE); // bottom
+                doXMSquare(blocks, p, set, RenderPoly.TRI1); // back
+                doZMSquare(blocks, p, set, RenderPoly.TRI1); // back
+                doRect(blocks, p, set, RenderPoly.XPYP, RenderPoly.TRI1);
+                doRect(blocks, p, set, RenderPoly.YPZP, RenderPoly.TRI4);
                 break;
             case 2: // spire: xm,zp>yp
-                doYMSquare(blocks, p, polys, RenderPoly.SQUARE); // bottom
-                doXPSquare(blocks, p, polys, RenderPoly.TRI1); // back
-                doZMSquare(blocks, p, polys, RenderPoly.TRI2); // back
-                doRect(blocks, p, polys, RenderPoly.XMYP, RenderPoly.TRI1);
-                doRect(blocks, p, polys, RenderPoly.YPZP, RenderPoly.TRI3);
+                doYMSquare(blocks, p, set, RenderPoly.SQUARE); // bottom
+                doXPSquare(blocks, p, set, RenderPoly.TRI1); // back
+                doZMSquare(blocks, p, set, RenderPoly.TRI2); // back
+                doRect(blocks, p, set, RenderPoly.XMYP, RenderPoly.TRI1);
+                doRect(blocks, p, set, RenderPoly.YPZP, RenderPoly.TRI3);
                 break;
             case 3: // spire: xm,zp>yp
-                doYMSquare(blocks, p, polys, RenderPoly.SQUARE); // bottom
-                doXPSquare(blocks, p, polys, RenderPoly.TRI4); // back
-                doZPSquare(blocks, p, polys, RenderPoly.TRI2); // back
-                doRect(blocks, p, polys, RenderPoly.XMYP, RenderPoly.TRI4);
-                doRect(blocks, p, polys, RenderPoly.YPZM, RenderPoly.TRI2);
+                doYMSquare(blocks, p, set, RenderPoly.SQUARE); // bottom
+                doXPSquare(blocks, p, set, RenderPoly.TRI4); // back
+                doZPSquare(blocks, p, set, RenderPoly.TRI2); // back
+                doRect(blocks, p, set, RenderPoly.XMYP, RenderPoly.TRI4);
+                doRect(blocks, p, set, RenderPoly.YPZM, RenderPoly.TRI2);
                 break;
             case 4: // spire: xm,zp>yp
-                doYPSquare(blocks, p, polys, RenderPoly.SQUARE); // bottom
-                doXMSquare(blocks, p, polys, RenderPoly.TRI3); // back
-                doZPSquare(blocks, p, polys, RenderPoly.TRI4); // back
-                doRect(blocks, p, polys, RenderPoly.XPYM, RenderPoly.TRI3);
-                doRect(blocks, p, polys, RenderPoly.YMZM, RenderPoly.TRI1);
+                doYPSquare(blocks, p, set, RenderPoly.SQUARE); // bottom
+                doXMSquare(blocks, p, set, RenderPoly.TRI3); // back
+                doZPSquare(blocks, p, set, RenderPoly.TRI4); // back
+                doRect(blocks, p, set, RenderPoly.XPYM, RenderPoly.TRI3);
+                doRect(blocks, p, set, RenderPoly.YMZM, RenderPoly.TRI1);
                 break;
             case 5: // spire: xm,zp>yp
-                doYPSquare(blocks, p, polys, RenderPoly.SQUARE); // bottom
-                doXMSquare(blocks, p, polys, RenderPoly.TRI2); // back
-                doZMSquare(blocks, p, polys, RenderPoly.TRI4); // back
-                doRect(blocks, p, polys, RenderPoly.XPYM, RenderPoly.TRI2);
-                doRect(blocks, p, polys, RenderPoly.YMZP, RenderPoly.TRI4);
+                doYPSquare(blocks, p, set, RenderPoly.SQUARE); // bottom
+                doXMSquare(blocks, p, set, RenderPoly.TRI2); // back
+                doZMSquare(blocks, p, set, RenderPoly.TRI4); // back
+                doRect(blocks, p, set, RenderPoly.XPYM, RenderPoly.TRI2);
+                doRect(blocks, p, set, RenderPoly.YMZP, RenderPoly.TRI4);
                 break;
             case 6: // spire: xm,zp>yp
-                doYPSquare(blocks, p, polys, RenderPoly.SQUARE); // bottom
-                doXPSquare(blocks, p, polys, RenderPoly.TRI2); // back
-                doZMSquare(blocks, p, polys, RenderPoly.TRI3); // back
-                doRect(blocks, p, polys, RenderPoly.XMYM, RenderPoly.TRI4);
-                doRect(blocks, p, polys, RenderPoly.YMZP, RenderPoly.TRI3);
+                doYPSquare(blocks, p, set, RenderPoly.SQUARE); // bottom
+                doXPSquare(blocks, p, set, RenderPoly.TRI2); // back
+                doZMSquare(blocks, p, set, RenderPoly.TRI3); // back
+                doRect(blocks, p, set, RenderPoly.XMYM, RenderPoly.TRI4);
+                doRect(blocks, p, set, RenderPoly.YMZP, RenderPoly.TRI3);
                 break;
             case 7: // spire: xm,zp>yp
-                doYPSquare(blocks, p, polys, RenderPoly.SQUARE); // bottom
-                doXPSquare(blocks, p, polys, RenderPoly.TRI3); // back
-                doZPSquare(blocks, p, polys, RenderPoly.TRI3); // back
-                doRect(blocks, p, polys, RenderPoly.XMYM, RenderPoly.TRI3);
-                doRect(blocks, p, polys, RenderPoly.YMZM, RenderPoly.TRI2);
+                doYPSquare(blocks, p, set, RenderPoly.SQUARE); // bottom
+                doXPSquare(blocks, p, set, RenderPoly.TRI3); // back
+                doZPSquare(blocks, p, set, RenderPoly.TRI3); // back
+                doRect(blocks, p, set, RenderPoly.XMYM, RenderPoly.TRI3);
+                doRect(blocks, p, set, RenderPoly.YMZM, RenderPoly.TRI2);
                 break;
         }
     }
 
-    private static void doWedge(SparseMatrix<Block> blocks, Point3i p, List<RenderPoly> polys) {
+    private static void doWedge(BlockSparseMatrix blocks, Point3i p, RenderSet set) {
         switch (blocks.get(p).getOrientation()) {
             case 0: // YPZM
-                doXMSquare(blocks, p, polys, RenderPoly.TRI4);
-                doXPSquare(blocks, p, polys, RenderPoly.TRI4);
+                doXMSquare(blocks, p, set, RenderPoly.TRI4);
+                doXPSquare(blocks, p, set, RenderPoly.TRI4);
                 // no YP face
-                doYMSquare(blocks, p, polys, RenderPoly.SQUARE);
-                doZPSquare(blocks, p, polys, RenderPoly.SQUARE);
+                doYMSquare(blocks, p, set, RenderPoly.SQUARE);
+                doZPSquare(blocks, p, set, RenderPoly.SQUARE);
                 // no ZM face
-                doRect(blocks, p, polys, RenderPoly.YPZM);
+                doRect(blocks, p, set, RenderPoly.YPZM);
                 break;
             case 1: // XMYP
-                doXPSquare(blocks, p, polys, RenderPoly.SQUARE);
+                doXPSquare(blocks, p, set, RenderPoly.SQUARE);
                 // no XM face
                 // no YP face
-                doYMSquare(blocks, p, polys, RenderPoly.SQUARE);
-                doZMSquare(blocks, p, polys, RenderPoly.TRI2);
-                doZPSquare(blocks, p, polys, RenderPoly.TRI2);
-                doRect(blocks, p, polys, RenderPoly.XMYP);
+                doYMSquare(blocks, p, set, RenderPoly.SQUARE);
+                doZMSquare(blocks, p, set, RenderPoly.TRI2);
+                doZPSquare(blocks, p, set, RenderPoly.TRI2);
+                doRect(blocks, p, set, RenderPoly.XMYP);
                 break;
             case 2: // YPZP
-                doXMSquare(blocks, p, polys, RenderPoly.TRI1);
-                doXPSquare(blocks, p, polys, RenderPoly.TRI1);
+                doXMSquare(blocks, p, set, RenderPoly.TRI1);
+                doXPSquare(blocks, p, set, RenderPoly.TRI1);
                 // no YP face
-                doYMSquare(blocks, p, polys, RenderPoly.SQUARE);
+                doYMSquare(blocks, p, set, RenderPoly.SQUARE);
                 // no ZP face
-                doZMSquare(blocks, p, polys, RenderPoly.SQUARE);
-                doRect(blocks, p, polys, RenderPoly.YPZP);
+                doZMSquare(blocks, p, set, RenderPoly.SQUARE);
+                doRect(blocks, p, set, RenderPoly.YPZP);
                 break;
             case 3: // XPYP
                 // no XP face
-                doXMSquare(blocks, p, polys, RenderPoly.SQUARE);
+                doXMSquare(blocks, p, set, RenderPoly.SQUARE);
                 // no YP face
-                doYMSquare(blocks, p, polys, RenderPoly.SQUARE);
-                doZMSquare(blocks, p, polys, RenderPoly.TRI1);
-                doZPSquare(blocks, p, polys, RenderPoly.TRI1);
-                doRect(blocks, p, polys, RenderPoly.XPYP);
+                doYMSquare(blocks, p, set, RenderPoly.SQUARE);
+                doZMSquare(blocks, p, set, RenderPoly.TRI1);
+                doZPSquare(blocks, p, set, RenderPoly.TRI1);
+                doRect(blocks, p, set, RenderPoly.XPYP);
                 break;
             case 4: // YMZM
-                doXMSquare(blocks, p, polys, RenderPoly.TRI3);
-                doXPSquare(blocks, p, polys, RenderPoly.TRI3);
-                doYPSquare(blocks, p, polys, RenderPoly.SQUARE);
+                doXMSquare(blocks, p, set, RenderPoly.TRI3);
+                doXPSquare(blocks, p, set, RenderPoly.TRI3);
+                doYPSquare(blocks, p, set, RenderPoly.SQUARE);
                 // no YM face
-                doZPSquare(blocks, p, polys, RenderPoly.SQUARE);
+                doZPSquare(blocks, p, set, RenderPoly.SQUARE);
                 // no ZM face
-                doRect(blocks, p, polys, RenderPoly.YMZM);
+                doRect(blocks, p, set, RenderPoly.YMZM);
                 break;
             case 5: // XPYM
                 // no XP face
-                doXMSquare(blocks, p, polys, RenderPoly.SQUARE);
-                doYPSquare(blocks, p, polys, RenderPoly.SQUARE);
+                doXMSquare(blocks, p, set, RenderPoly.SQUARE);
+                doYPSquare(blocks, p, set, RenderPoly.SQUARE);
                 // no YM face
-                doZMSquare(blocks, p, polys, RenderPoly.TRI4);
-                doZPSquare(blocks, p, polys, RenderPoly.TRI4);
-                doRect(blocks, p, polys, RenderPoly.XPYM);
+                doZMSquare(blocks, p, set, RenderPoly.TRI4);
+                doZPSquare(blocks, p, set, RenderPoly.TRI4);
+                doRect(blocks, p, set, RenderPoly.XPYM);
                 break;
             case 6: // YMZP
-                doXMSquare(blocks, p, polys, RenderPoly.TRI2);
-                doXPSquare(blocks, p, polys, RenderPoly.TRI2);
-                doYPSquare(blocks, p, polys, RenderPoly.SQUARE);
+                doXMSquare(blocks, p, set, RenderPoly.TRI2);
+                doXPSquare(blocks, p, set, RenderPoly.TRI2);
+                doYPSquare(blocks, p, set, RenderPoly.SQUARE);
                 // no YM face
                 // no ZP face
-                doZMSquare(blocks, p, polys, RenderPoly.SQUARE);
-                doRect(blocks, p, polys, RenderPoly.YMZP);
+                doZMSquare(blocks, p, set, RenderPoly.SQUARE);
+                doRect(blocks, p, set, RenderPoly.YMZP);
                 break;
             case 7: // XMYM
-                doXPSquare(blocks, p, polys, RenderPoly.SQUARE);
+                doXPSquare(blocks, p, set, RenderPoly.SQUARE);
                 // no XM face
-                doYPSquare(blocks, p, polys, RenderPoly.SQUARE);
+                doYPSquare(blocks, p, set, RenderPoly.SQUARE);
                 // no YM face
-                doZMSquare(blocks, p, polys, RenderPoly.TRI3);
-                doZPSquare(blocks, p, polys, RenderPoly.TRI3);
-                doRect(blocks, p, polys, RenderPoly.XMYM);
+                doZMSquare(blocks, p, set, RenderPoly.TRI3);
+                doZPSquare(blocks, p, set, RenderPoly.TRI3);
+                doRect(blocks, p, set, RenderPoly.XMYM);
                 break;
             case 8: // XPZM
             case 12: // ???
                 // no XP face
-                doXMSquare(blocks, p, polys, RenderPoly.SQUARE);
-                doYPSquare(blocks, p, polys, RenderPoly.TRI4);
-                doYMSquare(blocks, p, polys, RenderPoly.TRI4);
-                doZPSquare(blocks, p, polys, RenderPoly.SQUARE);
+                doXMSquare(blocks, p, set, RenderPoly.SQUARE);
+                doYPSquare(blocks, p, set, RenderPoly.TRI4);
+                doYMSquare(blocks, p, set, RenderPoly.TRI4);
+                doZPSquare(blocks, p, set, RenderPoly.SQUARE);
                 // no ZM face
-                doRect(blocks, p, polys, RenderPoly.ZMXP);
+                doRect(blocks, p, set, RenderPoly.ZMXP);
                 break;
             case 10: // XMZM
             case 14:
-                doXPSquare(blocks, p, polys, RenderPoly.SQUARE);
+                doXPSquare(blocks, p, set, RenderPoly.SQUARE);
                 // no XM face
-                doYPSquare(blocks, p, polys, RenderPoly.TRI3);
-                doYMSquare(blocks, p, polys, RenderPoly.TRI3);
-                doZPSquare(blocks, p, polys, RenderPoly.SQUARE);
+                doYPSquare(blocks, p, set, RenderPoly.TRI3);
+                doYMSquare(blocks, p, set, RenderPoly.TRI3);
+                doZPSquare(blocks, p, set, RenderPoly.SQUARE);
                 // no ZM face
-                doRect(blocks, p, polys, RenderPoly.ZMXM);
+                doRect(blocks, p, set, RenderPoly.ZMXM);
                 break;
             case 11: // XMZP
-                doXPSquare(blocks, p, polys, RenderPoly.SQUARE);
+                doXPSquare(blocks, p, set, RenderPoly.SQUARE);
                 // no XM face
-                doYPSquare(blocks, p, polys, RenderPoly.TRI2);
-                doYMSquare(blocks, p, polys, RenderPoly.TRI2);
+                doYPSquare(blocks, p, set, RenderPoly.TRI2);
+                doYMSquare(blocks, p, set, RenderPoly.TRI2);
                 // no ZP face
-                doZMSquare(blocks, p, polys, RenderPoly.SQUARE);
-                doRect(blocks, p, polys, RenderPoly.ZPXM);
+                doZMSquare(blocks, p, set, RenderPoly.SQUARE);
+                doRect(blocks, p, set, RenderPoly.ZPXM);
                 break;
             case 13: // XPZP
                 // no XP face
-                doXMSquare(blocks, p, polys, RenderPoly.SQUARE);
-                doYPSquare(blocks, p, polys, RenderPoly.TRI1);
-                doYMSquare(blocks, p, polys, RenderPoly.TRI1);
+                doXMSquare(blocks, p, set, RenderPoly.SQUARE);
+                doYPSquare(blocks, p, set, RenderPoly.TRI1);
+                doYMSquare(blocks, p, set, RenderPoly.TRI1);
                 // no ZP face
-                doZMSquare(blocks, p, polys, RenderPoly.SQUARE);
-                doRect(blocks, p, polys, RenderPoly.ZPXP);
+                doZMSquare(blocks, p, set, RenderPoly.SQUARE);
+                doRect(blocks, p, set, RenderPoly.ZPXP);
                 break;
             default:
                 log.log(Level.INFO, "Wedge with unknown ori="+blocks.get(p).getOrientation());
@@ -297,22 +298,22 @@ public class RenderPolyLogic {
         }
     }
 
-    private static void doCube(SparseMatrix<Block> blocks, Point3i p, List<RenderPoly> polys) {
-        doXPSquare(blocks, p, polys, RenderPoly.SQUARE);
-        doXMSquare(blocks, p, polys, RenderPoly.SQUARE);
-        doYPSquare(blocks, p, polys, RenderPoly.SQUARE);
-        doYMSquare(blocks, p, polys, RenderPoly.SQUARE);
-        doZPSquare(blocks, p, polys, RenderPoly.SQUARE);
-        doZMSquare(blocks, p, polys, RenderPoly.SQUARE);
+    private static void doCube(BlockSparseMatrix blocks, Point3i p, RenderSet set) {
+        doXPSquare(blocks, p, set, RenderPoly.SQUARE);
+        doXMSquare(blocks, p, set, RenderPoly.SQUARE);
+        doYPSquare(blocks, p, set, RenderPoly.SQUARE);
+        doYMSquare(blocks, p, set, RenderPoly.SQUARE);
+        doZPSquare(blocks, p, set, RenderPoly.SQUARE);
+        doZMSquare(blocks, p, set, RenderPoly.SQUARE);
     }
 
-    private static void doRect(SparseMatrix<Block> blocks, Point3i p,
-            List<RenderPoly> polys, int facing) {
-        doRect(blocks, p, polys, facing, RenderPoly.SQUARE);
+    private static void doRect(BlockSparseMatrix blocks, Point3i p,
+            RenderSet set, int facing) {
+        doRect(blocks, p, set, facing, RenderPoly.SQUARE);
     }
 
-    private static void doRect(SparseMatrix<Block> blocks, Point3i p,
-            List<RenderPoly> polys, int facing, int type) {
+    private static void doRect(BlockSparseMatrix blocks, Point3i p,
+            RenderSet set, int facing, int type) {
         RenderPoly rp = new RenderPoly();
         rp.setPosition(p);
         rp.setBlock(blocks.get(p));
@@ -370,11 +371,11 @@ public class RenderPolyLogic {
                 return;
         }
         rp.setType(type);
-        polys.add(rp);
+        set.addAllPolys(rp);
     }
 
-    private static void doZMSquare(SparseMatrix<Block> blocks, Point3i p,
-            List<RenderPoly> polys, int type) {
+    private static void doZMSquare(BlockSparseMatrix blocks, Point3i p,
+            RenderSet set, int type) {
         if (!opaque(blocks, p.x, p.y, p.z - 1)) {
             RenderPoly rp = new RenderPoly();
             rp.setPosition(p);
@@ -386,12 +387,12 @@ public class RenderPolyLogic {
                 new Point3i(p.x + 1, p.y + 1, p.z + 0),
                 new Point3i(p.x + 0, p.y + 1, p.z + 0),});
             rp.setType(type);
-            polys.add(rp);
+            set.addAllPolys(rp);
         }
     }
 
-    private static void doZPSquare(SparseMatrix<Block> blocks, Point3i p,
-            List<RenderPoly> polys, int type) {
+    private static void doZPSquare(BlockSparseMatrix blocks, Point3i p,
+            RenderSet set, int type) {
         if (!opaque(blocks, p.x, p.y, p.z + 1)) {
             RenderPoly rp = new RenderPoly();
             rp.setPosition(p);
@@ -403,12 +404,12 @@ public class RenderPolyLogic {
                 new Point3i(p.x + 1, p.y + 1, p.z + 1),
                 new Point3i(p.x + 0, p.y + 1, p.z + 1),});
             rp.setType(type);
-            polys.add(rp);
+            set.addAllPolys(rp);
         }
     }
 
-    private static void doYMSquare(SparseMatrix<Block> blocks, Point3i p,
-            List<RenderPoly> polys, int type) {
+    private static void doYMSquare(BlockSparseMatrix blocks, Point3i p,
+            RenderSet set, int type) {
         if (!opaque(blocks, p.x, p.y - 1, p.z)) {
             RenderPoly rp = new RenderPoly();
             rp.setPosition(p);
@@ -420,12 +421,12 @@ public class RenderPolyLogic {
                 new Point3i(p.x + 1, p.y + 0, p.z + 1),
                 new Point3i(p.x + 0, p.y + 0, p.z + 1),});
             rp.setType(type);
-            polys.add(rp);
+            set.addAllPolys(rp);
         }
     }
 
-    private static void doYPSquare(SparseMatrix<Block> blocks, Point3i p,
-            List<RenderPoly> polys, int type) {
+    private static void doYPSquare(BlockSparseMatrix blocks, Point3i p,
+            RenderSet set, int type) {
         if (!opaque(blocks, p.x, p.y + 1, p.z)) {
             RenderPoly rp = new RenderPoly();
             rp.setPosition(p);
@@ -437,12 +438,12 @@ public class RenderPolyLogic {
                 new Point3i(p.x + 1, p.y + 1, p.z + 1),
                 new Point3i(p.x + 0, p.y + 1, p.z + 1),});
             rp.setType(type);
-            polys.add(rp);
+            set.addAllPolys(rp);
         }
     }
 
-    private static void doXMSquare(SparseMatrix<Block> blocks, Point3i p,
-            List<RenderPoly> polys, int type) {
+    private static void doXMSquare(BlockSparseMatrix blocks, Point3i p,
+            RenderSet set, int type) {
         if (!opaque(blocks, p.x - 1, p.y, p.z)) {
             RenderPoly rp = new RenderPoly();
             rp.setPosition(p);
@@ -454,12 +455,12 @@ public class RenderPolyLogic {
                 new Point3i(p.x + 0, p.y + 1, p.z + 1),
                 new Point3i(p.x + 0, p.y + 0, p.z + 1),});
             rp.setType(type);
-            polys.add(rp);
+            set.addAllPolys(rp);
         }
     }
 
-    private static void doXPSquare(SparseMatrix<Block> blocks, Point3i p,
-            List<RenderPoly> polys, int type) {
+    private static void doXPSquare(BlockSparseMatrix blocks, Point3i p,
+            RenderSet set, int type) {
         if (!opaque(blocks, p.x + 1, p.y, p.z)) {
             RenderPoly rp = new RenderPoly();
             rp.setPosition(p);
@@ -471,19 +472,18 @@ public class RenderPolyLogic {
                 new Point3i(p.x + 1, p.y + 1, p.z + 1),
                 new Point3i(p.x + 1, p.y + 0, p.z + 1),});
             rp.setType(type);
-            polys.add(rp);
+            set.addAllPolys(rp);
         }
     }
 
-    private static boolean opaque(SparseMatrix<Block> grid, int x, int y, int z) {
+    private static boolean opaque(BlockSparseMatrix grid, int x, int y, int z) {
         Block b = grid.get(x, y, z);
         return (b != null) && !BlockTypes.isAnyCorner(b.getBlockID()) && !BlockTypes.isAnyWedge(b.getBlockID());
     }
 
     public static void transformAndSort(final RenderSet set, Matrix4f transform) {
-        List<RenderPoly> tiles = set.getAllPolys();
-        List<RenderPoly> visible = set.getVisiblePolys();
-        visible.clear();
+        Iterable<RenderPoly> tiles = set.getAllPolys();
+        set.clearVisiblePolys();
 
         Point3f o = new Point3f();
         transform.transform(o);
@@ -516,10 +516,10 @@ public class RenderPolyLogic {
         //System.out.println("Showing XPYP="+showing[RenderPoly.XPYP]);
         for (RenderPoly tile : tiles) {
             if (showing[tile.getNormal()]) {
-                visible.add(tile);
+            	set.addVisiblePolys(tile);
             }
         }
-        Collections.sort(visible, new Comparator<RenderPoly>() {
+        set.sortVisiblePolys(new Comparator<RenderPoly>() {
             @Override
             public int compare(RenderPoly tile1, RenderPoly tile2) {
                 float delta = getMidZ(tile2, set) - getMidZ(tile1, set);
@@ -566,7 +566,7 @@ public class RenderPolyLogic {
     }
 
     public static void draw(Graphics2D g2, RenderSet set, boolean fancyGraphics) {
-        for (RenderPoly tile : set.getVisiblePolys().toArray(new RenderPoly[0])) {
+        for (RenderPoly tile : set.getVisiblePolys()) {
             ImageIcon icon = null;
             if (fancyGraphics) {
                 icon = BlockTypeColors.getBlockImage(tile.getBlock().getBlockID());

@@ -19,6 +19,7 @@ package jo.sm.ui.act.edit;
 
 import java.awt.event.ActionEvent;
 
+import jo.sm.data.BlockSparseMatrix;
 import jo.sm.data.SparseMatrix;
 import jo.sm.logic.StarMadeLogic;
 import jo.sm.ship.data.Block;
@@ -42,7 +43,7 @@ public class SoftenAction extends GenericAction {
 
     @Override
     public void actionPerformed(ActionEvent ev) {
-        SparseMatrix<Block> grid = StarMadeLogic.getModel();
+        BlockSparseMatrix grid = StarMadeLogic.getModel();
         if (grid == null) {
             return;
         }

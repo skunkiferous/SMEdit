@@ -31,6 +31,7 @@ import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import jo.sm.data.BlockSparseMatrix;
 import jo.sm.data.BlockTypes;
 import jo.sm.data.SparseMatrix;
 import jo.sm.logic.StarMadeLogic;
@@ -67,7 +68,7 @@ public class PlotLogic {
     private static long mLastRead = 0;
     private static final Logger log = Logger.getLogger(PlotLogic.class.getName());
 
-    public static void mapHull(SparseMatrix<Block> modified, Hull3f hull,
+    public static void mapHull(BlockSparseMatrix modified, Hull3f hull,
             Point3f scale, Point3i lowerGrid, Point3i upperGrid, IPluginCallback cb) {
         Point3i center;
         center = Point3iLogic.interpolate(lowerGrid, upperGrid, .5f);
@@ -116,7 +117,7 @@ public class PlotLogic {
         return iA;
     }
 
-    public static void drawTriangle(SparseMatrix<Block> grid, Point3i a, Point3i b, Point3i c, short color) {
+    public static void drawTriangle(BlockSparseMatrix grid, Point3i a, Point3i b, Point3i c, short color) {
         // Brute force and ignorance method
         // Anything smarter seems to leave holes
         doDrawTriangle(grid, a, b, c, color);
@@ -124,7 +125,7 @@ public class PlotLogic {
         doDrawTriangle(grid, c, a, b, color);
     }
 
-    private static void doDrawTriangle(SparseMatrix<Block> grid,
+    private static void doDrawTriangle(BlockSparseMatrix grid,
             Point3i fulcrum, Point3i target1, Point3i target2, short color) {
         List<Point3i> iterpolate;
         iterpolate = new ArrayList<>();
@@ -139,7 +140,7 @@ public class PlotLogic {
         plotArea(grid, area, color);
     }
 
-    public static void drawTriangle(SparseMatrix<Block> grid, Point3i a, Point3i b, Point3i c, Point2f auv, Point2f buv, Point2f cuv, BufferedImage img) {
+    public static void drawTriangle(BlockSparseMatrix grid, Point3i a, Point3i b, Point3i c, Point2f auv, Point2f buv, Point2f cuv, BufferedImage img) {
         // Brute force and ignorance method
         // Anything smarter seems to leave holes
         doDrawTriangle(grid, a, b, c, auv, buv, cuv, img);
@@ -147,7 +148,7 @@ public class PlotLogic {
         doDrawTriangle(grid, c, a, b, cuv, auv, buv, img);
     }
 
-    private static void doDrawTriangle(SparseMatrix<Block> grid,
+    private static void doDrawTriangle(BlockSparseMatrix grid,
             Point3i fulcrum, Point3i target1, Point3i target2,
             Point2f fulcrumUV, Point2f target1UV, Point2f target2UV,
             BufferedImage img) {
@@ -161,21 +162,21 @@ public class PlotLogic {
         }
     }
 
-    private static void plotArea(SparseMatrix<Block> grid, Collection<Point3i> area,
+    private static void plotArea(BlockSparseMatrix grid, Collection<Point3i> area,
             short color) {
         for (Point3i p : area) {
             grid.set(p, new Block(color));
         }
     }
 
-    public static void drawLine(SparseMatrix<Block> grid, Point3i a, Point3i b, short color) {
+    public static void drawLine(BlockSparseMatrix grid, Point3i a, Point3i b, short color) {
         List<Point3i> plot;
         plot = new ArrayList<>();
         plotLine(a, b, plot);
         plotArea(grid, plot, color);
     }
 
-    public static void drawLine(SparseMatrix<Block> grid, Point3i a, Point3i b, Point2f auv, Point2f buv, BufferedImage img) {
+    public static void drawLine(BlockSparseMatrix grid, Point3i a, Point3i b, Point2f auv, Point2f buv, BufferedImage img) {
         List<Point3i> plot;
         plot = new ArrayList<>();
         plotLine(a, b, plot);
@@ -249,24 +250,26 @@ public class PlotLogic {
     }
 
     private static void loadColors() {
-        File plugins = new File(Paths.getPluginsDirectory());
-        File colorMap;
-        colorMap = new File(plugins, "color_map.xml");
-        if (colorMap.exists()) {
-            if (colorMap.lastModified() <= mLastRead) {
-                return;
-            }
-            try {
-                readColorFile(new FileInputStream(colorMap));
-                mLastRead = colorMap.lastModified();
-                return;
-            } catch (FileNotFoundException e) {
-                log.log(Level.WARNING, "File Input Stream failed!", e);
-            }
-        }
-        if (HULL_IDS == null) {
-            readColorFile(ResourceUtils.loadSystemResourceStream("color_map.xml", PlotLogic.class));
-        }
+    	if ((mLastRead == 0) || (System.currentTimeMillis() - mLastRead) >= 5000) {
+	        File plugins = new File(Paths.getPluginsDirectory());
+	        File colorMap;
+	        colorMap = new File(plugins, "color_map.xml");
+	        if (colorMap.exists()) {
+	            if (colorMap.lastModified() <= mLastRead) {
+	                return;
+	            }
+	            try {
+	                readColorFile(new FileInputStream(colorMap));
+	                mLastRead = System.currentTimeMillis();
+	                return;
+	            } catch (FileNotFoundException e) {
+	                log.log(Level.WARNING, "File Input Stream failed!", e);
+	            }
+	        }
+	        if (HULL_IDS == null) {
+	            readColorFile(ResourceUtils.loadSystemResourceStream("color_map.xml", PlotLogic.class));
+	        }
+    	}
     }
 
     private static void readColorFile(InputStream is) {

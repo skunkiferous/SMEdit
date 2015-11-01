@@ -1,0 +1,96 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<artifactId>jo_plugin</artifactId>
+	<name>jo_plugin</name>
+	<description>A modernized version of SMEdit Classic.</description>
+	<url>https://github.com/skunkiferous/SMEdit</url>
+	<packaging>jar</packaging>
+	<inceptionYear>2015</inceptionYear>
+	<organization>
+		<name>Sebastien Diot</name>
+	</organization>
+
+	<scm>
+		<connection>scm:git:git@github.com:skunkiferous/SMEdit.git</connection>
+		<developerConnection>scm:git:git@github.com:skunkiferous/SMEdit.git</developerConnection>
+		<url>git@github.com:skunkiferous/SMEdit.git</url>
+	</scm>
+
+	<developers>
+		<developer>
+			<id>skunkiferous</id>
+			<name>Sebastien Diot</name>
+			<email>monster@shadowdemon.com</email>
+		</developer>
+	</developers>
+
+	<licenses>
+		<license>
+			<name>The Apache Software License, Version 2.0</name>
+			<url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+			<distribution>repo</distribution>
+			<comments>A business-friendly OSS license</comments>
+		</license>
+	</licenses>
+
+	<parent>
+		<groupId>com.blockwithme</groupId>
+		<artifactId>SMEdit-Parent</artifactId>
+		<version>1.0.0</version>
+		<relativePath>..</relativePath>
+	</parent>
+
+	<dependencies>
+		<dependency>
+			<groupId>com.blockwithme</groupId>
+			<artifactId>jo_sm</artifactId>
+			<version>1.0.0</version>
+		</dependency>
+
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>3.8.1</version>
+			<scope>test</scope>
+		</dependency>
+	</dependencies>
+
+	<build>
+		<finalName>${project.artifactId}</finalName>
+		
+		<resources>
+			<resource>
+				<directory>.</directory>
+				<includes>
+					<include>LICENSE</include>
+				</includes>
+			</resource>
+			<resource>
+				<directory>src/main/java</directory>
+				<includes>
+					<include>**/*.xml</include>
+					<include>**/*.png</include>
+					<include>**/*.properties</include>
+				</includes>
+			</resource>
+		</resources>
+
+		<plugins>
+			<plugin>
+				<artifactId>maven-compiler-plugin</artifactId>
+			</plugin>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-jar-plugin</artifactId>
+				<configuration>
+					<archive>
+						<manifestFile>src/main/resources/META-INF/MANIFEST.MF</manifestFile>
+					</archive>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+</project>
