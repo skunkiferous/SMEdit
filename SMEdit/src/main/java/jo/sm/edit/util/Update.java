@@ -126,7 +126,7 @@ public class Update {
         if (download == null) {
             download = new UpdateGUI();
         }
-        final String jarNew = GlobalConfiguration.NAME + ".jar";
+        final String jarNew = Paths.STARTER_JAR;
         download(URLs.DOWNSTART, jarNew);
         final Runtime run = Runtime.getRuntime();
         try {

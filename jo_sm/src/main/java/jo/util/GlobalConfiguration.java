@@ -51,11 +51,8 @@ import jo.sm.logic.utils.StreamUtils;
  * @author Robert Barefoot - version 1.0
  */
 public class GlobalConfiguration {
-
-
-    public static final String NAME = "SMEdit";
-    public static final String NAME_LOWERCASE = NAME.toLowerCase();
-    public static final String SITE_NAME = "Lazygamerz";
+    public static final String NAME = "SMEditNG";
+    
     private static final OperatingSystem CURRENT_OS;
     private static boolean RUNNING_FROM_JAR = false;
 
